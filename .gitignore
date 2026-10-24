@@ -1,0 +1,9 @@
+.env
+*.p12
+*.jks
+target/
+node_modules/
+dist/
+.angular/
+.settings/
+Thumbs.db
