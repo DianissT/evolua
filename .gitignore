@@ -7,4 +7,3 @@ dist/
 .angular/
 .settings/
 Thumbs.db
-**/application-local.yml

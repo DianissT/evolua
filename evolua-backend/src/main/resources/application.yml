@@ -1,11 +1,15 @@
 spring:
   application:
     name: evolua-backend
-  profiles:
-    default: local
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/evolua}
+    username: ${DB_USER:evolua_user}
+    password: ${DB_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: validate
     open-in-view: false
-server:
-  port: 8080
+app:
+  jwt:
+    secret: ${JWT_SECRET}
+    expiration-minutes: 30
