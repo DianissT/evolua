@@ -22,7 +22,7 @@ import com.evolua.entity.Usuario;
 import com.evolua.repository.UsuarioRepository;
 
 /**
- * Pruebas de autenticación y autorización sobre el servidor en ejecución, con los usuarios de 03_seed.sql.
+ * Pruebas de autenticación y autorización sobre el servidor en ejecución, con los usuarios de prueba.
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class SeguridadIntegracionTest {

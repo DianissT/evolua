@@ -9,11 +9,18 @@ import com.evolua.dto.UsuarioResponse;
 import com.evolua.security.UsuarioPrincipal;
 import com.evolua.service.UsuarioService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 /**
- * Consulta del usuario autenticado
+ * Consulta del usuario autenticado.
  */
 @RestController
 @RequestMapping("/api/v1/users")
+@Tag(name = "Usuarios")
+@SecurityRequirement(name = "bearerAuth")
 public class UserController {
 
     private final UsuarioService usuarioService;
@@ -23,7 +30,8 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public UsuarioResponse perfil(@AuthenticationPrincipal UsuarioPrincipal usuario) {
+    @Operation(summary = "Devuelve los datos del usuario autenticado")
+    public UsuarioResponse perfil(@Parameter(hidden = true) @AuthenticationPrincipal UsuarioPrincipal usuario) {
         return usuarioService.obtenerPorId(usuario.getId());
     }
 }

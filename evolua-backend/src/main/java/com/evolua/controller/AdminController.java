@@ -10,11 +10,17 @@ import org.springframework.web.bind.annotation.RestController;
 import com.evolua.dto.AuditoriaResponse;
 import com.evolua.service.AuditoriaService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 /**
- * Operaciones solo para administradores
+ * Operaciones reservadas a los administradores.
  */
 @RestController
 @RequestMapping("/api/v1/admin")
+@Tag(name = "Administración")
+@SecurityRequirement(name = "bearerAuth")
 public class AdminController {
 
     private final AuditoriaService auditoriaService;
@@ -25,6 +31,7 @@ public class AdminController {
 
     @GetMapping("/audit")
     @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Lista los registros de auditoría, del más reciente al más antiguo")
     public List<AuditoriaResponse> auditoria() {
         return auditoriaService.listar();
     }
