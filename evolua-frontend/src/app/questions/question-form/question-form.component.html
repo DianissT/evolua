@@ -1,0 +1,145 @@
+<h1 class="h3 fw-bold mb-4">{{ (preguntaNumerica() === null ? 'questions.formNew' : 'questions.formEdit') | translate }}</h1>
+
+<app-alert [mensaje]="error()" />
+
+<form [formGroup]="formulario" (ngSubmit)="guardar()" novalidate>
+  <div class="row g-4">
+    <div class="col-lg-8">
+      <div class="card">
+        <div class="card-body p-4">
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label for="tema" class="form-label fw-semibold">{{ 'questions.topic' | translate }}</label>
+              <select id="tema" class="form-select" formControlName="temaId">
+                @for (tema of temas(); track tema.id) {
+                  <option [ngValue]="tema.id">{{ tema.nombre }}</option>
+                }
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label for="dificultad" class="form-label fw-semibold">{{ 'questions.difficulty' | translate }}</label>
+              <select id="dificultad" class="form-select" formControlName="dificultad">
+                @for (nivel of dificultades; track nivel) {
+                  <option [ngValue]="nivel">{{ 'difficulty.' + nivel | translate }}</option>
+                }
+              </select>
+            </div>
+          </div>
+
+          <fieldset class="mb-3">
+            <legend class="form-label fw-semibold fs-6">{{ 'questions.type' | translate }}</legend>
+            @for (tipo of tipos; track tipo) {
+              <div class="form-check form-check-inline">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="tipo"
+                  [id]="'tipo-' + tipo"
+                  [value]="tipo"
+                  [checked]="formulario.controls.tipo.value === tipo"
+                  (change)="cambiarTipo(tipo)"
+                />
+                <label class="form-check-label" [for]="'tipo-' + tipo">{{ 'questionType.' + tipo | translate }}</label>
+              </div>
+            }
+          </fieldset>
+
+          <div class="mb-3">
+            <label for="enunciado" class="form-label fw-semibold">{{ 'questions.statement' | translate }}</label>
+            <textarea
+              id="enunciado"
+              class="form-control"
+              rows="4"
+              formControlName="enunciado"
+              [class.is-invalid]="enviado() && formulario.controls.enunciado.invalid"
+              [attr.aria-invalid]="enviado() && formulario.controls.enunciado.invalid"
+              aria-describedby="enunciado-error"
+            ></textarea>
+            @if (enviado() && formulario.controls.enunciado.invalid) {
+              <div id="enunciado-error" class="invalid-feedback">{{ 'questions.statementRequired' | translate }}</div>
+            }
+          </div>
+
+          <fieldset class="mb-3">
+            <legend class="form-label fw-semibold fs-6">{{ 'questions.options' | translate }}</legend>
+            <p class="small text-secondary">{{ 'questions.optionsHelp' | translate }}</p>
+            @for (opcion of opciones.controls; track $index) {
+              <div class="input-group mb-2">
+                <div class="input-group-text">
+                  <input
+                    class="form-check-input mt-0"
+                    type="radio"
+                    name="correcta"
+                    [checked]="formulario.controls.correcta.value === $index"
+                    [attr.aria-label]="'questions.markCorrect' | translate: { number: $index + 1 }"
+                    (change)="marcarCorrecta($index)"
+                  />
+                </div>
+                <input
+                  type="text"
+                  class="form-control"
+                  [formControl]="opcion"
+                  [readOnly]="esVerdaderoFalso()"
+                  [class.is-invalid]="enviado() && opcion.invalid"
+                  [attr.aria-label]="'questions.optionNumber' | translate: { number: $index + 1 }"
+                  [attr.aria-invalid]="enviado() && opcion.invalid"
+                />
+                @if (!esVerdaderoFalso()) {
+                  <button
+                    type="button"
+                    class="btn btn-outline-secondary"
+                    [disabled]="opciones.length <= minimoOpciones"
+                    [attr.aria-label]="'questions.removeOption' | translate: { number: $index + 1 }"
+                    (click)="quitarOpcion($index)"
+                  >
+                    ✕
+                  </button>
+                }
+              </div>
+            }
+            @if (enviado() && opciones.invalid) {
+              <div class="text-danger small" role="alert">{{ 'questions.optionsRequired' | translate }}</div>
+            }
+            @if (!esVerdaderoFalso()) {
+              <button
+                type="button"
+                class="btn btn-outline-primary btn-sm"
+                [disabled]="opciones.length >= maximoOpciones"
+                (click)="agregarOpcion()"
+              >
+                {{ 'questions.addOption' | translate }}
+              </button>
+            }
+          </fieldset>
+
+          <div class="mb-4">
+            <label for="retro" class="form-label fw-semibold">{{ 'questions.feedback' | translate }}</label>
+            <textarea id="retro" class="form-control" rows="2" formControlName="retroalimentacion"></textarea>
+          </div>
+
+          <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary" [disabled]="guardando()">{{ 'common.save' | translate }}</button>
+            <a class="btn btn-outline-secondary" [routerLink]="['/courses', cursoNumerico(), 'topics', temaNumerico(), 'questions']">
+              {{ 'common.cancel' | translate }}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <aside class="col-lg-4" [attr.aria-label]="'questions.preview' | translate">
+      <div class="card bg-white">
+        <div class="card-body">
+          <p class="small fw-bold text-secondary text-uppercase mb-3">{{ 'questions.preview' | translate }}</p>
+          <p class="fw-semibold text-pre-wrap">{{ formulario.controls.enunciado.value || ('questions.previewEmpty' | translate) }}</p>
+          <ul class="list-group mb-3">
+            @for (opcion of opciones.controls; track $index) {
+              <li class="list-group-item">{{ opcion.value || '…' }}</li>
+            }
+          </ul>
+          <p class="small text-secondary mb-0">{{ 'questions.previewNote' | translate }}</p>
+        </div>
+      </div>
+    </aside>
+  </div>
+</form>

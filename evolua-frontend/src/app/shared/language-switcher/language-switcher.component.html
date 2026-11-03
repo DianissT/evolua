@@ -1,0 +1,15 @@
+<div class="btn-group btn-group-sm" role="group" [attr.aria-label]="'layout.language' | translate">
+  @for (idioma of idiomas; track idioma) {
+    <button
+      type="button"
+      class="btn"
+      [class.btn-primary]="actual() === idioma"
+      [class.btn-outline-primary]="actual() !== idioma"
+      [attr.aria-pressed]="actual() === idioma"
+      [attr.lang]="idioma"
+      (click)="cambiar(idioma)"
+    >
+      {{ idioma.toUpperCase() }}
+    </button>
+  }
+</div>

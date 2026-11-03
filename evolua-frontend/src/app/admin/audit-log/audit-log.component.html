@@ -1,0 +1,34 @@
+<h1 class="h3 fw-bold mb-4">{{ 'audit.title' | translate }}</h1>
+<app-alert [mensaje]="error()" />
+
+@if (cargando()) {
+  <p class="text-secondary" role="status">{{ 'common.loading' | translate }}</p>
+} @else if (registros().length === 0 && !error()) {
+  <p class="text-secondary">{{ 'audit.empty' | translate }}</p>
+} @else {
+  <div class="table-responsive card">
+    <table class="table table-hover mb-0 align-middle">
+      <caption class="visually-hidden">{{ 'audit.title' | translate }}</caption>
+      <thead>
+        <tr>
+          <th scope="col">{{ 'audit.date' | translate }}</th>
+          <th scope="col">{{ 'audit.user' | translate }}</th>
+          <th scope="col">{{ 'audit.action' | translate }}</th>
+          <th scope="col">{{ 'audit.entity' | translate }}</th>
+          <th scope="col">{{ 'audit.detail' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (registro of registros(); track registro.id) {
+          <tr>
+            <td class="text-nowrap">{{ registro.fecha | date: 'yyyy-MM-dd HH:mm' }}</td>
+            <td>{{ registro.usuarioId ?? '—' }}</td>
+            <td><span class="badge text-bg-secondary">{{ registro.accion }}</span></td>
+            <td>{{ registro.entidad }} #{{ registro.entidadId }}</td>
+            <td>{{ registro.detalle }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}

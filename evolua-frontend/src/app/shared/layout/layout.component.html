@@ -1,0 +1,43 @@
+<a class="visually-hidden-focusable position-absolute p-2 bg-white" href="#contenido">{{ 'layout.skip' | translate }}</a>
+
+<header>
+  <nav class="navbar navbar-expand-lg bg-white border-bottom" [attr.aria-label]="'layout.mainNav' | translate">
+    <div class="container">
+      <a class="navbar-brand fw-bold text-primary" routerLink="/">Evolua</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        aria-controls="menu-principal"
+        [attr.aria-expanded]="menuAbierto()"
+        [attr.aria-label]="'layout.toggleMenu' | translate"
+        (click)="alternarMenu()"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div id="menu-principal" class="collapse navbar-collapse" [class.show]="menuAbierto()">
+        <ul class="navbar-nav me-auto">
+          @for (enlace of enlaces(); track enlace.ruta) {
+            <li class="nav-item">
+              <a class="nav-link" [routerLink]="enlace.ruta" routerLinkActive="active" ariaCurrentWhenActive="page">
+                {{ enlace.clave | translate }}
+              </a>
+            </li>
+          }
+        </ul>
+        <div class="d-flex flex-column flex-lg-row align-items-lg-center gap-2 gap-lg-3 py-2 py-lg-0">
+          <app-language-switcher />
+          @if (usuario(); as u) {
+            <span class="small text-secondary">{{ u.nombre }} · {{ 'roles.' + u.rol | translate }}</span>
+          }
+          <button type="button" class="btn btn-outline-primary btn-sm" (click)="salir()">
+            {{ 'layout.logout' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<main id="contenido" class="container py-4" tabindex="-1">
+  <router-outlet />
+</main>

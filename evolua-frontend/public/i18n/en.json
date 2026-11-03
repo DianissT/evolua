@@ -1,0 +1,125 @@
+{
+  "common": {
+    "loading": "Loading…",
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "activate": "Activate",
+    "deactivate": "Deactivate",
+    "active": "Active",
+    "inactive": "Inactive",
+    "status": "Status",
+    "actions": "Actions",
+    "backHome": "Back to home"
+  },
+  "nav": {
+    "courses": "Courses",
+    "audit": "Audit log"
+  },
+  "layout": {
+    "skip": "Skip to content",
+    "mainNav": "Main navigation",
+    "toggleMenu": "Show or hide the menu",
+    "language": "Language",
+    "logout": "Log out"
+  },
+  "roles": {
+    "ESTUDIANTE": "Student",
+    "DOCENTE": "Teacher",
+    "ADMIN": "Administrator"
+  },
+  "login": {
+    "tagline": "Practice what you need, when you need it.",
+    "description": "Evolua analyzes your results by topic and recommends you practice activities.",
+    "title": "Log in",
+    "subtitle": "Use the account assigned by your institution.",
+    "email": "Email",
+    "password": "Password",
+    "emailRequired": "Email is required.",
+    "emailInvalid": "The email format is not valid.",
+    "passwordRequired": "Password is required.",
+    "submit": "Log in",
+    "submitting": "Logging in…",
+    "invalid": "Incorrect email or password.",
+    "expired": "Your session has expired. Please log in again."
+  },
+  "courses": {
+    "title": "My courses",
+    "new": "New course",
+    "emptyTeacher": "You don't have any courses yet. Create the first one.",
+    "emptyStudent": "You are not enrolled in any active course.",
+    "teacher": "Teacher",
+    "manage": "Manage",
+    "view": "View topics",
+    "confirmDeactivate": "Deactivate the course “{{name}}”? Students will no longer see it.",
+    "formNew": "New course",
+    "formEdit": "Edit course",
+    "name": "Name",
+    "nameRequired": "The name is required (maximum 150 characters).",
+    "description": "Description",
+    "backToList": "Back to my courses"
+  },
+  "topics": {
+    "title": "Topics",
+    "newName": "Name of the new topic",
+    "nameRequired": "The topic name is required (maximum 120 characters).",
+    "add": "Add topic",
+    "empty": "This course has no topics yet.",
+    "questions": "Questions",
+    "confirmDeactivate": "Deactivate the topic “{{name}}”?"
+  },
+  "questions": {
+    "title": "Questions",
+    "new": "New question",
+    "empty": "This topic has no questions yet.",
+    "statement": "Statement",
+    "difficulty": "Difficulty",
+    "type": "Question type",
+    "backToCourse": "Back to the course",
+    "formNew": "Create question",
+    "formEdit": "Edit question",
+    "topic": "Topic",
+    "statementRequired": "The statement is required.",
+    "options": "Options",
+    "optionsHelp": "Mark the correct option with the selection button.",
+    "markCorrect": "Mark option {{number}} as correct",
+    "optionNumber": "Text of option {{number}}",
+    "removeOption": "Remove option {{number}}",
+    "optionsRequired": "Every option must have text.",
+    "addOption": "Add option",
+    "feedback": "Feedback",
+    "preview": "Student preview",
+    "previewEmpty": "The statement will appear here.",
+    "previewNote": "Students do not see the correct option until they finish the attempt.",
+    "confirmDeactivate": "Deactivate this question? It will no longer be used in new attempts."
+  },
+  "difficulty": {
+    "1": "Basic",
+    "2": "Medium",
+    "3": "High"
+  },
+  "questionType": {
+    "SELECCION_MULTIPLE": "Multiple choice",
+    "VERDADERO_FALSO": "True or false"
+  },
+  "audit": {
+    "title": "Audit log",
+    "empty": "There are no audit records yet.",
+    "date": "Date",
+    "user": "User",
+    "action": "Action",
+    "entity": "Entity",
+    "detail": "Detail"
+  },
+  "errors": {
+    "network": "Could not connect to the server. Please try again.",
+    "401": "Your session is not valid. Please log in again.",
+    "403": "You do not have permission to perform this action.",
+    "404": "The requested resource was not found.",
+    "generic": "An unexpected error occurred.",
+    "forbiddenTitle": "Access denied",
+    "forbiddenText": "You do not have permission to view this page.",
+    "notFoundTitle": "Page not found",
+    "notFoundText": "The page you are looking for does not exist."
+  }
+}

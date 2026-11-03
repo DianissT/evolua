@@ -1,0 +1,125 @@
+{
+  "common": {
+    "loading": "Cargando…",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "edit": "Editar",
+    "activate": "Activar",
+    "deactivate": "Desactivar",
+    "active": "Activo",
+    "inactive": "Inactivo",
+    "status": "Estado",
+    "actions": "Acciones",
+    "backHome": "Volver al inicio"
+  },
+  "nav": {
+    "courses": "Cursos",
+    "audit": "Auditoría"
+  },
+  "layout": {
+    "skip": "Saltar al contenido",
+    "mainNav": "Navegación principal",
+    "toggleMenu": "Mostrar u ocultar el menú",
+    "language": "Idioma",
+    "logout": "Cerrar sesión"
+  },
+  "roles": {
+    "ESTUDIANTE": "Estudiante",
+    "DOCENTE": "Docente",
+    "ADMIN": "Administrador"
+  },
+  "login": {
+    "tagline": "Practica lo que necesitas, cuando lo necesitas.",
+    "description": "Evolua analiza tus resultados por tema y te recomienda actividades de práctica.",
+    "title": "Inicia sesión",
+    "subtitle": "Usa la cuenta que te asignó tu institución.",
+    "email": "Correo",
+    "password": "Contraseña",
+    "emailRequired": "El correo es obligatorio.",
+    "emailInvalid": "El correo no tiene un formato válido.",
+    "passwordRequired": "La contraseña es obligatoria.",
+    "submit": "Ingresar",
+    "submitting": "Ingresando…",
+    "invalid": "Correo o contraseña incorrectos.",
+    "expired": "Tu sesión expiró. Inicia sesión de nuevo."
+  },
+  "courses": {
+    "title": "Mis cursos",
+    "new": "Nuevo curso",
+    "emptyTeacher": "Aún no tienes cursos. Crea el primero.",
+    "emptyStudent": "No estás matriculado en ningún curso activo.",
+    "teacher": "Docente",
+    "manage": "Administrar",
+    "view": "Ver temas",
+    "confirmDeactivate": "¿Desactivar el curso «{{name}}»? Los estudiantes dejarán de verlo.",
+    "formNew": "Nuevo curso",
+    "formEdit": "Editar curso",
+    "name": "Nombre",
+    "nameRequired": "El nombre es obligatorio (máximo 150 caracteres).",
+    "description": "Descripción",
+    "backToList": "Volver a mis cursos"
+  },
+  "topics": {
+    "title": "Temas",
+    "newName": "Nombre del nuevo tema",
+    "nameRequired": "El nombre del tema es obligatorio (máximo 120 caracteres).",
+    "add": "Agregar tema",
+    "empty": "Este curso aún no tiene temas.",
+    "questions": "Preguntas",
+    "confirmDeactivate": "¿Desactivar el tema «{{name}}»?"
+  },
+  "questions": {
+    "title": "Preguntas",
+    "new": "Nueva pregunta",
+    "empty": "Este tema aún no tiene preguntas.",
+    "statement": "Enunciado",
+    "difficulty": "Dificultad",
+    "type": "Tipo de pregunta",
+    "backToCourse": "Volver al curso",
+    "formNew": "Crear pregunta",
+    "formEdit": "Editar pregunta",
+    "topic": "Tema",
+    "statementRequired": "El enunciado es obligatorio.",
+    "options": "Opciones",
+    "optionsHelp": "Marca la opción correcta con el botón de selección.",
+    "markCorrect": "Marcar la opción {{number}} como correcta",
+    "optionNumber": "Texto de la opción {{number}}",
+    "removeOption": "Quitar la opción {{number}}",
+    "optionsRequired": "Todas las opciones deben tener texto.",
+    "addOption": "Agregar opción",
+    "feedback": "Retroalimentación",
+    "preview": "Vista previa del estudiante",
+    "previewEmpty": "El enunciado aparecerá aquí.",
+    "previewNote": "El estudiante no ve la opción correcta hasta finalizar el intento.",
+    "confirmDeactivate": "¿Desactivar esta pregunta? Dejará de usarse en nuevos intentos."
+  },
+  "difficulty": {
+    "1": "Básica",
+    "2": "Media",
+    "3": "Alta"
+  },
+  "questionType": {
+    "SELECCION_MULTIPLE": "Selección múltiple",
+    "VERDADERO_FALSO": "Verdadero o falso"
+  },
+  "audit": {
+    "title": "Auditoría",
+    "empty": "Aún no hay registros de auditoría.",
+    "date": "Fecha",
+    "user": "Usuario",
+    "action": "Acción",
+    "entity": "Entidad",
+    "detail": "Detalle"
+  },
+  "errors": {
+    "network": "No se pudo conectar con el servidor. Inténtalo de nuevo.",
+    "401": "Tu sesión no es válida. Inicia sesión de nuevo.",
+    "403": "No tienes permiso para realizar esta acción.",
+    "404": "No se encontró el recurso solicitado.",
+    "generic": "Ocurrió un error inesperado.",
+    "forbiddenTitle": "Acceso denegado",
+    "forbiddenText": "No tienes permiso para ver esta página.",
+    "notFoundTitle": "Página no encontrada",
+    "notFoundText": "La página que buscas no existe."
+  }
+}

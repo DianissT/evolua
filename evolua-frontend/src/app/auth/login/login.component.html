@@ -1,0 +1,65 @@
+<div class="row g-0 min-vh-100">
+  <section class="col-lg-6 d-none d-lg-flex flex-column justify-content-center panel-marca text-white p-5">
+    <p class="fs-3 fw-bold mb-4" style="color: #bac8ff">Evolua</p>
+    <h1 class="display-5 fw-bold mb-3">{{ 'login.tagline' | translate }}</h1>
+    <p class="fs-5 texto-marca">{{ 'login.description' | translate }}</p>
+  </section>
+
+  <main class="col-lg-6 d-flex flex-column align-items-center justify-content-center p-4 position-relative">
+    <div class="position-absolute top-0 end-0 m-3">
+      <app-language-switcher />
+    </div>
+
+    <form class="card shadow-sm w-100" style="max-width: 420px" [formGroup]="formulario" (ngSubmit)="ingresar()" novalidate>
+      <div class="card-body p-4">
+        <h2 class="h3 fw-bold mb-1">{{ 'login.title' | translate }}</h2>
+        <p class="text-secondary mb-4">{{ 'login.subtitle' | translate }}</p>
+
+        @if (sesionExpirada) {
+          <app-alert tipo="warning" [mensaje]="'login.expired' | translate" />
+        }
+        <app-alert [mensaje]="error()" />
+
+        <div class="mb-3">
+          <label for="correo" class="form-label fw-semibold">{{ 'login.email' | translate }}</label>
+          <input
+            id="correo"
+            type="email"
+            class="form-control"
+            formControlName="correo"
+            autocomplete="username"
+            [class.is-invalid]="enviado() && formulario.controls.correo.invalid"
+            [attr.aria-invalid]="enviado() && formulario.controls.correo.invalid"
+            aria-describedby="correo-error"
+          />
+          @if (enviado() && formulario.controls.correo.invalid) {
+            <div id="correo-error" class="invalid-feedback">
+              {{ (formulario.controls.correo.hasError('required') ? 'login.emailRequired' : 'login.emailInvalid') | translate }}
+            </div>
+          }
+        </div>
+
+        <div class="mb-4">
+          <label for="password" class="form-label fw-semibold">{{ 'login.password' | translate }}</label>
+          <input
+            id="password"
+            type="password"
+            class="form-control"
+            formControlName="password"
+            autocomplete="current-password"
+            [class.is-invalid]="enviado() && formulario.controls.password.invalid"
+            [attr.aria-invalid]="enviado() && formulario.controls.password.invalid"
+            aria-describedby="password-error"
+          />
+          @if (enviado() && formulario.controls.password.invalid) {
+            <div id="password-error" class="invalid-feedback">{{ 'login.passwordRequired' | translate }}</div>
+          }
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100" [disabled]="cargando()">
+          {{ (cargando() ? 'login.submitting' : 'login.submit') | translate }}
+        </button>
+      </div>
+    </form>
+  </main>
+</div>

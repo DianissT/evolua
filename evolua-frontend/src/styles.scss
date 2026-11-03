@@ -1,0 +1,69 @@
+@use 'bootstrap/dist/css/bootstrap.min';
+
+:root {
+  --bs-primary: #3b5bdb;
+  --bs-primary-rgb: 59, 91, 219;
+  --bs-link-color: #2f4ac0;
+  --bs-link-color-rgb: 47, 74, 192;
+  --bs-link-hover-color: #243a99;
+  --bs-link-hover-color-rgb: 36, 58, 153;
+  --bs-body-bg: #f4f6fb;
+  --bs-body-color: #0f1b33;
+  --bs-secondary-color: #4a5878;
+  --bs-border-color: #d5dcec;
+  --bs-body-font-family: Inter, 'Segoe UI', system-ui, -apple-system, Arial, sans-serif;
+  --bs-border-radius: 0.625rem;
+  --bs-border-radius-lg: 0.875rem;
+}
+
+.btn-primary {
+  --bs-btn-bg: #3b5bdb;
+  --bs-btn-border-color: #3b5bdb;
+  --bs-btn-hover-bg: #2f4ac0;
+  --bs-btn-hover-border-color: #2f4ac0;
+  --bs-btn-active-bg: #2a42ab;
+  --bs-btn-active-border-color: #2a42ab;
+  --bs-btn-disabled-bg: #3b5bdb;
+  --bs-btn-disabled-border-color: #3b5bdb;
+  --bs-btn-focus-shadow-rgb: 59, 91, 219;
+}
+
+.btn-outline-primary {
+  --bs-btn-color: #2f4ac0;
+  --bs-btn-border-color: #3b5bdb;
+  --bs-btn-hover-bg: #3b5bdb;
+  --bs-btn-hover-border-color: #3b5bdb;
+  --bs-btn-active-bg: #3b5bdb;
+  --bs-btn-active-border-color: #3b5bdb;
+  --bs-btn-disabled-color: #3b5bdb;
+  --bs-btn-disabled-border-color: #3b5bdb;
+  --bs-btn-focus-shadow-rgb: 59, 91, 219;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #8da0ee;
+  box-shadow: 0 0 0 0.25rem rgba(59, 91, 219, 0.25);
+}
+
+.form-check-input:checked {
+  background-color: #3b5bdb;
+  border-color: #3b5bdb;
+}
+
+.form-check-input:focus {
+  border-color: #8da0ee;
+  box-shadow: 0 0 0 0.25rem rgba(59, 91, 219, 0.25);
+}
+
+.card {
+  --bs-card-border-color: #e3e8f2;
+}
+
+.text-pre-wrap {
+  white-space: pre-wrap;
+}
+
+.text-primary {
+  color: #2f4ac0 !important;
+}

@@ -1,0 +1,87 @@
+<a class="btn btn-link px-0 mb-2" routerLink="/courses">← {{ 'courses.backToList' | translate }}</a>
+
+<app-alert [mensaje]="error()" />
+
+@if (cargando()) {
+  <p class="text-secondary" role="status">{{ 'common.loading' | translate }}</p>
+}
+
+@if (curso(); as c) {
+  <header class="mb-4">
+    <h1 class="h3 fw-bold">{{ c.nombre }}</h1>
+    <p class="text-secondary mb-1">{{ 'courses.teacher' | translate }}: {{ c.docenteNombre }}</p>
+    <p>{{ c.descripcion }}</p>
+  </header>
+
+  <section [attr.aria-labelledby]="'temas-titulo'">
+    <h2 id="temas-titulo" class="h5 fw-bold mb-3">{{ 'topics.title' | translate }}</h2>
+
+    @if (esDocente()) {
+      <form class="row g-2 mb-4" (ngSubmit)="agregarTema()" novalidate>
+        <div class="col-12 col-md-8">
+          <label for="nuevo-tema" class="visually-hidden">{{ 'topics.newName' | translate }}</label>
+          <input
+            id="nuevo-tema"
+            type="text"
+            class="form-control"
+            [formControl]="nuevoTema"
+            [placeholder]="'topics.newName' | translate"
+            [class.is-invalid]="nuevoEnviado() && nuevoTema.invalid"
+            [attr.aria-invalid]="nuevoEnviado() && nuevoTema.invalid"
+          />
+          @if (nuevoEnviado() && nuevoTema.invalid) {
+            <div class="invalid-feedback">{{ 'topics.nameRequired' | translate }}</div>
+          }
+        </div>
+        <div class="col-12 col-md-4">
+          <button type="submit" class="btn btn-primary w-100">{{ 'topics.add' | translate }}</button>
+        </div>
+      </form>
+    }
+
+    @if (temas().length === 0 && !cargando()) {
+      <p class="text-secondary">{{ 'topics.empty' | translate }}</p>
+    } @else {
+      <ul class="list-group">
+        @for (tema of temas(); track tema.id) {
+          <li class="list-group-item d-flex flex-wrap justify-content-between align-items-center gap-2">
+            @if (editando() === tema.id) {
+              <div class="flex-grow-1">
+                <label [for]="'edit-' + tema.id" class="visually-hidden">{{ 'topics.newName' | translate }}</label>
+                <input [id]="'edit-' + tema.id" type="text" class="form-control" [formControl]="nombreEdicion" />
+              </div>
+              <div class="d-flex gap-2">
+                <button type="button" class="btn btn-primary btn-sm" (click)="guardarEdicion(tema)">
+                  {{ 'common.save' | translate }}
+                </button>
+                <button type="button" class="btn btn-outline-secondary btn-sm" (click)="cancelarEdicion()">
+                  {{ 'common.cancel' | translate }}
+                </button>
+              </div>
+            } @else {
+              <div>
+                <span class="fw-semibold">{{ tema.orden }}. {{ tema.nombre }}</span>
+                @if (!tema.activo) {
+                  <span class="badge text-bg-secondary ms-2">{{ 'common.inactive' | translate }}</span>
+                }
+              </div>
+              @if (esDocente()) {
+                <div class="d-flex flex-wrap gap-2">
+                  <a class="btn btn-primary btn-sm" [routerLink]="['/courses', c.id, 'topics', tema.id, 'questions']">
+                    {{ 'topics.questions' | translate }}
+                  </a>
+                  <button type="button" class="btn btn-outline-primary btn-sm" (click)="editar(tema)">
+                    {{ 'common.edit' | translate }}
+                  </button>
+                  <button type="button" class="btn btn-outline-secondary btn-sm" (click)="alternarActivo(tema)">
+                    {{ (tema.activo ? 'common.deactivate' : 'common.activate') | translate }}
+                  </button>
+                </div>
+              }
+            }
+          </li>
+        }
+      </ul>
+    }
+  </section>
+}
