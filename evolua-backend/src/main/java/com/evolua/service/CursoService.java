@@ -95,6 +95,15 @@ public class CursoService {
     }
 
     @Transactional(readOnly = true)
+    public Curso cursoGestionable(Long id, UsuarioPrincipal usuario) {
+        Curso curso = buscar(id);
+        if (usuario.getRol() != Rol.ADMIN) {
+            verificarPropietario(curso, usuario.getId());
+        }
+        return curso;
+    }
+
+    @Transactional(readOnly = true)
     public Curso cursoVisible(Long id, UsuarioPrincipal usuario) {
         Curso curso = buscar(id);
         if (usuario.getRol() == Rol.DOCENTE) {

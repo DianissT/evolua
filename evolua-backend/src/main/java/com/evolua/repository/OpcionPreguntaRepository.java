@@ -1,5 +1,6 @@
 package com.evolua.repository;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,6 +16,8 @@ import com.evolua.entity.OpcionPregunta;
 public interface OpcionPreguntaRepository extends JpaRepository<OpcionPregunta, Long> {
 
     List<OpcionPregunta> findByPreguntaIdOrderByOrden(Long preguntaId);
+
+    List<OpcionPregunta> findByPreguntaIdInOrderByPreguntaIdAscOrdenAsc(Collection<Long> preguntaIds);
 
     @Modifying(flushAutomatically = true)
     @Query("delete from OpcionPregunta o where o.pregunta.id = :preguntaId")

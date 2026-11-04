@@ -8,11 +8,13 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,7 +30,7 @@ import com.evolua.repository.UsuarioRepository;
 
 /**
  * Base de las pruebas de integración de la API. Consume el servidor en ejecución con los usuarios de
- *prueba y elimina al terminar cada prueba los datos que esta haya creado.
+ * prueba y elimina al terminar cada prueba los datos que esta haya creado.
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 abstract class PruebaApiBase {
@@ -143,17 +145,64 @@ abstract class PruebaApiBase {
         return idDe(respuesta);
     }
 
+    protected Long crearPregunta(Long temaId, String enunciado) throws Exception {
+        String cuerpo = "{\"temaId\":" + temaId + ",\"enunciado\":\"" + enunciado + "\",\"dificultad\":1,"
+                + "\"tipo\":\"SELECCION_MULTIPLE\",\"retroalimentacion\":\"Explicación de " + enunciado + "\","
+                + "\"opciones\":[{\"texto\":\"Correcta\",\"esCorrecta\":true},"
+                + "{\"texto\":\"Incorrecta\",\"esCorrecta\":false}]}";
+        HttpResponse<String> respuesta = enviar("POST", "/api/v1/questions", LAURA, cuerpo);
+        assertEquals(201, respuesta.statusCode());
+        return idDe(respuesta);
+    }
+
+    protected Long opcionCorrecta(Long preguntaId) {
+        return jdbc.queryForObject("SELECT id FROM opciones_pregunta WHERE pregunta_id = ? AND es_correcta", Long.class,
+                preguntaId);
+    }
+
+    protected Long opcionIncorrecta(Long preguntaId) {
+        return jdbc.queryForObject("SELECT id FROM opciones_pregunta WHERE pregunta_id = ? AND NOT es_correcta",
+                Long.class, preguntaId);
+    }
+
+    protected static String lista(Long... ids) {
+        return Arrays.stream(ids).map(String::valueOf).collect(Collectors.joining(","));
+    }
+
+    protected Long crearEvaluacion(Long cursoId, String nombre, Integer intentosPermitidos, Long... preguntaIds)
+            throws Exception {
+        String cuerpo = "{\"cursoId\":" + cursoId + ",\"nombre\":\"" + nombre + "\",\"tipo\":\"FORMATIVA\","
+                + "\"intentosPermitidos\":" + intentosPermitidos + ",\"preguntaIds\":[" + lista(preguntaIds) + "]}";
+        HttpResponse<String> respuesta = enviar("POST", "/api/v1/quizzes", LAURA, cuerpo);
+        assertEquals(201, respuesta.statusCode());
+        return idDe(respuesta);
+    }
+
     protected void matricular(String correo, Long cursoId) {
         jdbc.update("INSERT INTO matriculas (estudiante_id, curso_id) SELECT id, ?::bigint FROM usuarios WHERE correo = ?",
                 cursoId, correo);
     }
 
     private void eliminarCurso(Long cursoId) {
+        String evaluacionesDelCurso = "SELECT id FROM evaluaciones WHERE curso_id = ?";
+        String temasDelCurso = "SELECT id FROM temas WHERE curso_id = ?";
         String preguntasDelCurso = "SELECT p.id FROM preguntas p JOIN temas t ON t.id = p.tema_id WHERE t.curso_id = ?";
-        jdbc.update("DELETE FROM respuestas WHERE pregunta_id IN (" + preguntasDelCurso + ")", cursoId);
-        jdbc.update("DELETE FROM intentos WHERE tema_id IN (SELECT id FROM temas WHERE curso_id = ?)", cursoId);
+        jdbc.execute("ALTER TABLE respuestas DISABLE TRIGGER trg_proteger_respuestas");
+        jdbc.execute("ALTER TABLE intentos DISABLE TRIGGER trg_proteger_intento");
+        try {
+            jdbc.update("DELETE FROM respuestas WHERE intento_id IN (SELECT id FROM intentos WHERE evaluacion_id IN ("
+                    + evaluacionesDelCurso + ") OR tema_id IN (" + temasDelCurso + ")) OR pregunta_id IN ("
+                    + preguntasDelCurso + ")", cursoId, cursoId, cursoId);
+            jdbc.update("DELETE FROM intentos WHERE evaluacion_id IN (" + evaluacionesDelCurso + ") OR tema_id IN ("
+                    + temasDelCurso + ")", cursoId, cursoId);
+        } finally {
+            jdbc.execute("ALTER TABLE intentos ENABLE TRIGGER trg_proteger_intento");
+            jdbc.execute("ALTER TABLE respuestas ENABLE TRIGGER trg_proteger_respuestas");
+        }
+        jdbc.update("DELETE FROM evaluacion_preguntas WHERE evaluacion_id IN (" + evaluacionesDelCurso + ")", cursoId);
+        jdbc.update("DELETE FROM evaluaciones WHERE curso_id = ?", cursoId);
         jdbc.update("DELETE FROM opciones_pregunta WHERE pregunta_id IN (" + preguntasDelCurso + ")", cursoId);
-        jdbc.update("DELETE FROM preguntas WHERE tema_id IN (SELECT id FROM temas WHERE curso_id = ?)", cursoId);
+        jdbc.update("DELETE FROM preguntas WHERE tema_id IN (" + temasDelCurso + ")", cursoId);
         jdbc.update("DELETE FROM temas WHERE curso_id = ?", cursoId);
         jdbc.update("DELETE FROM matriculas WHERE curso_id = ?", cursoId);
         jdbc.update("DELETE FROM cursos WHERE id = ?", cursoId);
