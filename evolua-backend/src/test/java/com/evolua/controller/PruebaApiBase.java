@@ -203,6 +203,8 @@ abstract class PruebaApiBase {
         jdbc.update("DELETE FROM evaluaciones WHERE curso_id = ?", cursoId);
         jdbc.update("DELETE FROM opciones_pregunta WHERE pregunta_id IN (" + preguntasDelCurso + ")", cursoId);
         jdbc.update("DELETE FROM preguntas WHERE tema_id IN (" + temasDelCurso + ")", cursoId);
+        jdbc.update("DELETE FROM recomendaciones WHERE tema_id IN (" + temasDelCurso + ")", cursoId);
+        jdbc.update("DELETE FROM progreso_tema WHERE tema_id IN (" + temasDelCurso + ")", cursoId);
         jdbc.update("DELETE FROM temas WHERE curso_id = ?", cursoId);
         jdbc.update("DELETE FROM matriculas WHERE curso_id = ?", cursoId);
         jdbc.update("DELETE FROM cursos WHERE id = ?", cursoId);

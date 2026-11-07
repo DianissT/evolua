@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -13,15 +14,19 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.evolua.adaptation.EstadisticaTema;
+import com.evolua.adaptation.MotorAdaptativoService;
 import com.evolua.dto.IntentoIniciado;
 import com.evolua.dto.IntentoResponse;
 import com.evolua.dto.IntentoResumenResponse;
 import com.evolua.dto.OpcionIntentoResponse;
 import com.evolua.dto.OpcionRevisionResponse;
 import com.evolua.dto.PreguntaIntentoResponse;
+import com.evolua.dto.RecomendacionResponse;
 import com.evolua.dto.RespuestaRequest;
 import com.evolua.dto.RespuestaResponse;
 import com.evolua.dto.ResultadoIntentoResponse;
+import com.evolua.dto.ResultadoTemaResponse;
 import com.evolua.dto.RevisionPreguntaResponse;
 import com.evolua.entity.EstadoIntento;
 import com.evolua.entity.Evaluacion;
@@ -30,6 +35,7 @@ import com.evolua.entity.Intento;
 import com.evolua.entity.OpcionPregunta;
 import com.evolua.entity.Pregunta;
 import com.evolua.entity.Respuesta;
+import com.evolua.entity.Tema;
 import com.evolua.entity.TipoIntento;
 import com.evolua.exception.ConflictoException;
 import com.evolua.exception.RecursoNoEncontradoException;
@@ -58,10 +64,13 @@ public class IntentoService {
     private final OpcionPreguntaRepository opciones;
     private final MatriculaRepository matriculas;
     private final UsuarioRepository usuarios;
+    private final MotorAdaptativoService motor;
+    private final RecomendacionService recomendaciones;
 
     public IntentoService(IntentoRepository intentos, RespuestaRepository respuestas,
             EvaluacionRepository evaluaciones, EvaluacionPreguntaRepository vinculos,
-            OpcionPreguntaRepository opciones, MatriculaRepository matriculas, UsuarioRepository usuarios) {
+            OpcionPreguntaRepository opciones, MatriculaRepository matriculas, UsuarioRepository usuarios,
+            MotorAdaptativoService motor, RecomendacionService recomendaciones) {
         this.intentos = intentos;
         this.respuestas = respuestas;
         this.evaluaciones = evaluaciones;
@@ -69,6 +78,8 @@ public class IntentoService {
         this.opciones = opciones;
         this.matriculas = matriculas;
         this.usuarios = usuarios;
+        this.motor = motor;
+        this.recomendaciones = recomendaciones;
     }
 
     /**
@@ -142,7 +153,8 @@ public class IntentoService {
 
     /**
      * Califica el intento y lo finaliza. Todo ocurre en una sola transacción: las respuestas se califican y se
-     * guardan antes de cambiar el intento a FINALIZADO. Las preguntas sin responder cuentan como incorrectas.
+     * guardan antes de cambiar el intento a FINALIZADO, y a continuación el motor adaptativo actualiza el progreso
+     * y genera las recomendaciones. Las preguntas sin responder cuentan como incorrectas.
      */
     @Transactional
     public ResultadoIntentoResponse finalizar(Long intentoId, Long estudianteId) {
@@ -163,7 +175,12 @@ public class IntentoService {
         intento.setPuntuacion(calcularPuntuacion(correctas, filas.size()));
         intento.setFechaFin(LocalDateTime.now());
         intento.setEstado(EstadoIntento.FINALIZADO);
-        return construirResultado(intento);
+        intentos.saveAndFlush(intento);
+
+        List<RecomendacionResponse> nuevas = motor.actualizarTrasIntento(estudianteId, temasDe(filas)).stream()
+                .map(RecomendacionResponse::desde)
+                .toList();
+        return construirResultado(intento, filas, nuevas);
     }
 
     @Transactional(readOnly = true)
@@ -172,7 +189,8 @@ public class IntentoService {
         if (intento.getEstado() == EstadoIntento.EN_CURSO) {
             throw new ConflictoException("El intento aún no ha finalizado");
         }
-        return construirResultado(intento);
+        List<Respuesta> filas = respuestas.findByIntentoIdOrderById(intentoId);
+        return construirResultado(intento, filas, recomendaciones.vigentesEnTemas(estudianteId, temasDe(filas)));
     }
 
     @Transactional(readOnly = true)
@@ -219,8 +237,8 @@ public class IntentoService {
                 intento.getEvaluacion().getNombre(), intento.getEstado(), intento.getFechaInicio(), preguntas);
     }
 
-    private ResultadoIntentoResponse construirResultado(Intento intento) {
-        List<Respuesta> filas = respuestas.findByIntentoIdOrderById(intento.getId());
+    private ResultadoIntentoResponse construirResultado(Intento intento, List<Respuesta> filas,
+            List<RecomendacionResponse> recomendacionesDelIntento) {
         Map<Long, List<OpcionPregunta>> opcionesPorPregunta = opcionesDe(filas);
         List<RevisionPreguntaResponse> revision = new ArrayList<>();
         int correctas = 0;
@@ -246,7 +264,25 @@ public class IntentoService {
         return new ResultadoIntentoResponse(intento.getId(), intento.getEvaluacion().getId(),
                 intento.getEvaluacion().getNombre(), intento.getEstado(), intento.getFechaInicio(),
                 intento.getFechaFin(), intento.getPuntuacion(), total, correctas, total - correctas - sinResponder,
-                sinResponder, revision);
+                sinResponder, revision, resultadosPorTema(filas), recomendacionesDelIntento);
+    }
+
+    private List<Long> temasDe(List<Respuesta> filas) {
+        return filas.stream().map(fila -> fila.getPregunta().getTema().getId()).distinct().sorted().toList();
+    }
+
+    private List<ResultadoTemaResponse> resultadosPorTema(List<Respuesta> filas) {
+        Map<Tema, List<Respuesta>> porTema = filas.stream()
+                .collect(Collectors.groupingBy(fila -> fila.getPregunta().getTema(), LinkedHashMap::new,
+                        Collectors.toList()));
+        return porTema.entrySet().stream().map(entrada -> {
+            int total = entrada.getValue().size();
+            int correctas = (int) entrada.getValue().stream()
+                    .filter(fila -> Boolean.TRUE.equals(fila.getEsCorrecta()))
+                    .count();
+            return new ResultadoTemaResponse(entrada.getKey().getId(), entrada.getKey().getNombre(), correctas, total,
+                    EstadisticaTema.calcularPorcentaje(correctas, total));
+        }).toList();
     }
 
     private Map<Long, List<OpcionPregunta>> opcionesDe(List<Respuesta> filas) {

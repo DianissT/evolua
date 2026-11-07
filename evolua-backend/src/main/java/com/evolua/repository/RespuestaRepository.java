@@ -1,9 +1,12 @@
 package com.evolua.repository;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.evolua.entity.Respuesta;
 
@@ -19,4 +22,20 @@ public interface RespuestaRepository extends JpaRepository<Respuesta, Long> {
     Optional<Respuesta> findByIntentoIdAndPreguntaId(Long intentoId, Long preguntaId);
 
     boolean existsByPreguntaId(Long preguntaId);
+
+    @Query("select p.tema.id as temaId, count(r) as total, "
+            + "sum(case when r.esCorrecta = true then 1 else 0 end) as correctas "
+            + "from Respuesta r join r.pregunta p join r.intento i "
+            + "where i.estudiante.id = :estudianteId and i.estado = com.evolua.entity.EstadoIntento.FINALIZADO "
+            + "and p.tema.id in :temaIds group by p.tema.id")
+    List<ResumenTema> resumenPorTema(@Param("estudianteId") Long estudianteId,
+            @Param("temaIds") Collection<Long> temaIds);
+
+    @Query("select i.id as intentoId, p.tema.id as temaId, count(r) as total, "
+            + "sum(case when r.esCorrecta = true then 1 else 0 end) as correctas "
+            + "from Respuesta r join r.pregunta p join r.intento i "
+            + "where i.estudiante.id = :estudianteId and i.estado = com.evolua.entity.EstadoIntento.FINALIZADO "
+            + "and p.tema.id in :temaIds group by i.id, p.tema.id")
+    List<ResumenIntentoTema> resumenPorIntentoYTema(@Param("estudianteId") Long estudianteId,
+            @Param("temaIds") Collection<Long> temaIds);
 }
