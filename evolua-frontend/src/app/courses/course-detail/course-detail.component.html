@@ -84,4 +84,10 @@
       </ul>
     }
   </section>
+
+  <app-quiz-list [courseId]="c.id" [esDocente]="esDocente()" />
+
+  @if (esDocente()) {
+    <app-enrollment-panel [courseId]="c.id" />
+  }
 }

@@ -1,0 +1,104 @@
+<app-alert [mensaje]="error()" />
+
+@if (cargando()) {
+  <p class="text-secondary" role="status">{{ 'common.loading' | translate }}</p>
+}
+
+@if (resultado(); as r) {
+  <p class="small text-secondary mb-1">{{ r.evaluacionNombre }} · {{ 'state.' + r.estado | translate }}</p>
+  <h1 class="h3 fw-bold mb-4">{{ 'result.title' | translate }}</h1>
+
+  <div class="row g-4 align-items-start">
+    <section class="col-lg-5" aria-labelledby="puntuacion-titulo">
+      <div class="card">
+        <div class="card-body p-4">
+          <h2 id="puntuacion-titulo" class="visually-hidden">{{ 'result.score' | translate }}</h2>
+          <p class="display-3 fw-bold text-primary mb-1">{{ numero(r.puntuacion) }} %</p>
+          <p class="text-secondary mb-1">{{ 'result.correctOf' | translate: { correct: r.correctas, total: r.totalPreguntas } }}</p>
+          @if (r.sinResponder > 0) {
+            <p class="small text-secondary">{{ 'result.unanswered' | translate: { count: r.sinResponder } }}</p>
+          }
+
+          <h3 class="h6 fw-bold mt-4">{{ 'result.byTopic' | translate }}</h3>
+          @for (t of r.temas; track t.temaId) {
+            <div class="mt-3">
+              <div class="d-flex justify-content-between small mb-1">
+                <span>{{ t.temaNombre }}</span>
+                <strong>{{ 'result.topicLine' | translate: { correct: t.correctas, total: t.total, percent: numero(t.porcentaje) } }}</strong>
+              </div>
+              <div class="progress" role="progressbar" [attr.aria-label]="t.temaNombre" [attr.aria-valuenow]="t.porcentaje" aria-valuemin="0" aria-valuemax="100">
+                <div [class]="'progress-bar bg-' + colorTema(t.temaId)" [style.width.%]="t.porcentaje"></div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="col-lg-7" aria-labelledby="recomendacion-titulo">
+      <h2 id="recomendacion-titulo" class="visually-hidden">{{ 'result.recommendations' | translate }}</h2>
+      @for (rec of r.recomendaciones; track rec.id) {
+        <article class="card mb-3">
+          <div class="card-body p-4">
+            <span [class]="'badge text-bg-' + color(rec.tipoActividad)">{{ 'activity.' + rec.tipoActividad | translate }}</span>
+            <h3 class="h4 fw-bold my-2">{{ rec.temaNombre }}</h3>
+            <div class="bg-body-tertiary rounded p-3 mb-3">
+              <p class="fw-bold mb-1">{{ 'result.why' | translate }}</p>
+              <p class="mb-0">{{ rec.motivo }}</p>
+            </div>
+            <p class="mb-0 small text-secondary">
+              {{ 'result.suggestedDifficulty' | translate }}:
+              {{ 'difficulty.' + rec.dificultadMinima | translate }}
+              @if (rec.dificultadMaxima !== rec.dificultadMinima) {
+                – {{ 'difficulty.' + rec.dificultadMaxima | translate }}
+              }
+            </p>
+          </div>
+        </article>
+      } @empty {
+        <p class="text-secondary">{{ 'result.noRecommendations' | translate }}</p>
+      }
+      <div class="d-flex flex-wrap gap-2">
+        <a class="btn btn-primary" routerLink="/progress">{{ 'courses.viewProgress' | translate }}</a>
+        <a class="btn btn-outline-primary" routerLink="/courses">{{ 'result.backToCourses' | translate }}</a>
+      </div>
+    </section>
+  </div>
+
+  <section class="mt-5" aria-labelledby="revision-titulo">
+    <h2 id="revision-titulo" class="h5 fw-bold mb-3">{{ 'result.review' | translate }}</h2>
+    @for (p of r.preguntas; track p.id; let n = $index) {
+      @let parte = partes(p.enunciado);
+      <details class="card mb-2">
+        <summary class="card-body py-3">
+          <span [class]="p.esCorrecta ? 'text-success fw-bold' : 'text-danger fw-bold'" aria-hidden="true">{{ p.esCorrecta ? '✓' : '✗' }}</span>
+          <span class="visually-hidden">{{ (p.esCorrecta ? 'result.correct' : 'result.incorrect') | translate }}</span>
+          {{ n + 1 }}. {{ parte.texto }}
+        </summary>
+        <div class="card-body border-top">
+          @if (parte.codigo) {
+            <pre class="codigo"><code>{{ parte.codigo }}</code></pre>
+          }
+          <ul class="list-group mb-3">
+            @for (o of p.opciones; track o.id) {
+              <li class="list-group-item d-flex flex-wrap justify-content-between gap-2">
+                <span>{{ o.texto }}</span>
+                <span>
+                  @if (o.id === p.opcionSeleccionadaId) {
+                    <span class="badge text-bg-light border">{{ 'result.yourAnswer' | translate }}</span>
+                  }
+                  @if (o.esCorrecta) {
+                    <span class="badge text-bg-success">{{ 'result.correctAnswer' | translate }}</span>
+                  }
+                </span>
+              </li>
+            }
+          </ul>
+          @if (p.retroalimentacion) {
+            <p class="mb-0"><strong>{{ 'result.feedback' | translate }}:</strong> {{ p.retroalimentacion }}</p>
+          }
+        </div>
+      </details>
+    }
+  </section>
+}

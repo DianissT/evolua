@@ -1,0 +1,60 @@
+<section class="mt-5" aria-labelledby="matriculas-titulo">
+  <h2 id="matriculas-titulo" class="h5 fw-bold mb-3">{{ 'enrollments.title' | translate }}</h2>
+
+  <app-alert [mensaje]="error()" />
+  <app-alert tipo="success" [mensaje]="exito()" />
+
+  <form class="row g-2 mb-4" (ngSubmit)="matricular()" novalidate>
+    <div class="col-12 col-md-8">
+      <label for="correo-estudiante" class="visually-hidden">{{ 'enrollments.email' | translate }}</label>
+      <input
+        id="correo-estudiante"
+        type="email"
+        class="form-control"
+        [formControl]="correo"
+        [placeholder]="'enrollments.email' | translate"
+        [class.is-invalid]="enviado() && correo.invalid"
+        [attr.aria-invalid]="enviado() && correo.invalid"
+        aria-describedby="correo-estudiante-error"
+      />
+      @if (enviado() && correo.invalid) {
+        <div id="correo-estudiante-error" class="invalid-feedback">{{ 'enrollments.emailInvalid' | translate }}</div>
+      }
+    </div>
+    <div class="col-12 col-md-4">
+      <button type="submit" class="btn btn-primary w-100">{{ 'enrollments.add' | translate }}</button>
+    </div>
+  </form>
+
+  @if (matriculas().length === 0) {
+    <p class="text-secondary">{{ 'enrollments.empty' | translate }}</p>
+  } @else {
+    <div class="table-responsive card">
+      <table class="table table-hover mb-0 align-middle">
+        <caption class="visually-hidden">{{ 'enrollments.title' | translate }}</caption>
+        <thead>
+          <tr>
+            <th scope="col">{{ 'enrollments.student' | translate }}</th>
+            <th scope="col">{{ 'enrollments.emailColumn' | translate }}</th>
+            <th scope="col">{{ 'enrollments.date' | translate }}</th>
+            <th scope="col"><span class="visually-hidden">{{ 'common.actions' | translate }}</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (matricula of matriculas(); track matricula.id) {
+            <tr>
+              <td>{{ matricula.estudianteNombre }}</td>
+              <td>{{ matricula.estudianteCorreo }}</td>
+              <td class="text-nowrap">{{ matricula.fechaMatricula | date: 'yyyy-MM-dd' }}</td>
+              <td class="text-end">
+                <button type="button" class="btn btn-outline-secondary btn-sm" (click)="quitar(matricula)">
+                  {{ 'enrollments.remove' | translate }}
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</section>

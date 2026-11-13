@@ -7,6 +7,16 @@
 
 <app-alert [mensaje]="error()" />
 
+@if (recomendacion(); as r) {
+  <aside [class]="'alert alert-' + color(r.tipoActividad) + ' d-flex flex-wrap align-items-center gap-3 mb-4'" role="region" [attr.aria-label]="'courses.recommendation' | translate">
+    <div class="flex-grow-1">
+      <p class="fw-bold mb-1">{{ 'activity.' + r.tipoActividad | translate }} · {{ r.temaNombre }}</p>
+      <p class="mb-0">{{ r.motivo }}</p>
+    </div>
+    <a class="btn btn-primary" routerLink="/progress">{{ 'courses.viewProgress' | translate }}</a>
+  </aside>
+}
+
 @if (cargando()) {
   <p class="text-secondary" role="status">{{ 'common.loading' | translate }}</p>
 } @else if (lista().length === 0 && !error()) {

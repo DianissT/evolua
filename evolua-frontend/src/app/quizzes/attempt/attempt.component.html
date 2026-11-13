@@ -1,0 +1,86 @@
+<app-alert [mensaje]="error()" />
+
+@if (cargando()) {
+  <p class="text-secondary" role="status">{{ 'common.loading' | translate }}</p>
+}
+
+@if (intento(); as i) {
+  @if (pregunta(); as p) {
+    <div class="mx-auto" style="max-width: 820px">
+      <div class="d-flex flex-wrap justify-content-between gap-2 small text-secondary mb-2">
+        <span>{{ i.evaluacionNombre }}</span>
+        <strong class="text-body">{{ 'attempt.questionOf' | translate: { current: indice() + 1, total: total() } }}</strong>
+      </div>
+      <div
+        class="progress mb-4"
+        role="progressbar"
+        [attr.aria-label]="'attempt.progress' | translate"
+        [attr.aria-valuenow]="progreso()"
+        aria-valuemin="0"
+        aria-valuemax="100"
+      >
+        <div class="progress-bar" [style.width.%]="progreso()"></div>
+      </div>
+
+      <section class="card">
+        <div class="card-body p-4">
+          <h1 class="h4 fw-bold mb-3 text-pre-wrap">{{ partes()?.texto }}</h1>
+          @if (partes()?.codigo; as codigo) {
+            <pre class="codigo mb-4"><code>{{ codigo }}</code></pre>
+          }
+
+          <fieldset class="d-flex flex-column gap-2">
+            <legend class="visually-hidden">{{ 'attempt.chooseAnswer' | translate }}</legend>
+            @for (opcion of p.opciones; track opcion.id) {
+              <label class="opcion" [class.seleccionada]="respuestas()[p.id] === opcion.id">
+                <input
+                  type="radio"
+                  class="form-check-input mt-0"
+                  [name]="'pregunta-' + p.id"
+                  [value]="opcion.id"
+                  [checked]="respuestas()[p.id] === opcion.id"
+                  (change)="seleccionar(p.id, opcion.id)"
+                />
+                <span>{{ opcion.texto }}</span>
+              </label>
+            }
+          </fieldset>
+
+          <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mt-4">
+            <button type="button" class="btn btn-outline-primary" [disabled]="indice() === 0" (click)="anterior()">
+              {{ 'attempt.previous' | translate }}
+            </button>
+            @if (pendientes() > 0) {
+              <span class="small text-secondary" role="status">{{ 'attempt.saving' | translate }}</span>
+            }
+            @if (esUltima()) {
+              <button type="button" class="btn btn-primary" [disabled]="pendientes() > 0 || finalizando()" (click)="finalizar()">
+                {{ 'attempt.finish' | translate }}
+              </button>
+            } @else {
+              <button type="button" class="btn btn-primary" (click)="siguiente()">{{ 'attempt.next' | translate }}</button>
+            }
+          </div>
+        </div>
+      </section>
+
+      <nav class="d-flex flex-wrap gap-2 mt-4" [attr.aria-label]="'attempt.questions' | translate">
+        @for (q of i.preguntas; track q.id; let n = $index) {
+          <button
+            type="button"
+            class="btn btn-sm"
+            [class.btn-primary]="n === indice()"
+            [class.btn-outline-primary]="n !== indice() && respuestas()[q.id] !== undefined"
+            [class.btn-outline-secondary]="n !== indice() && respuestas()[q.id] === undefined"
+            [attr.aria-current]="n === indice() ? 'step' : null"
+            [attr.aria-label]="'attempt.goTo' | translate: { number: n + 1 }"
+            (click)="ir(n)"
+          >
+            {{ n + 1 }}
+          </button>
+        }
+      </nav>
+      <p class="small text-secondary mt-2">{{ 'attempt.answered' | translate: { answered: total() - sinResponder(), total: total() } }}</p>
+    </div>
+  }
+}

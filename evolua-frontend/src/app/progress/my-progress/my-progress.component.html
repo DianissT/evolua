@@ -1,0 +1,118 @@
+<h1 class="h3 fw-bold mb-4">{{ 'progress.title' | translate }}</h1>
+
+<app-alert [mensaje]="error()" />
+
+@if (cargando()) {
+  <p class="text-secondary" role="status">{{ 'common.loading' | translate }}</p>
+} @else {
+  <section aria-labelledby="temas-progreso-titulo">
+    <h2 id="temas-progreso-titulo" class="h5 fw-bold mb-3">{{ 'progress.topics' | translate }}</h2>
+    @if (temas().length === 0) {
+      <p class="text-secondary">{{ 'progress.empty' | translate }}</p>
+    } @else {
+      <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+        @for (t of temas(); track t.temaId) {
+          <div class="col">
+            <article class="card h-100">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start gap-2">
+                  <h3 class="h6 fw-bold mb-0">{{ t.temaNombre }}</h3>
+                  <span [class]="'badge ' + claseNivel(t.nivel)">{{ 'level.' + t.nivel | translate }}</span>
+                </div>
+                <p class="small text-secondary mb-2">{{ t.cursoNombre }}</p>
+                <p class="display-6 fw-bold mb-2">{{ numero(t.porcentajeAciertos) }} %</p>
+                <div class="progress mb-2" role="progressbar" [attr.aria-label]="t.temaNombre" [attr.aria-valuenow]="t.porcentajeAciertos" aria-valuemin="0" aria-valuemax="100">
+                  <div [class]="'progress-bar bg-' + colorNivel(t.nivel)" [style.width.%]="t.porcentajeAciertos"></div>
+                </div>
+                <p class="small text-secondary mb-0">
+                  {{ 'progress.answers' | translate: { correct: t.respuestasCorrectas, total: t.totalRespuestas } }} ·
+                  {{ 'progress.satisfactory' | translate: { count: t.intentosSatisfactorios } }}
+                </p>
+              </div>
+            </article>
+          </div>
+        }
+      </div>
+    }
+  </section>
+
+  <div class="row g-4 mt-1">
+    <section class="col-lg-7" aria-labelledby="evolucion-titulo">
+      <div class="card h-100">
+        <div class="card-body">
+          <h2 id="evolucion-titulo" class="h6 fw-bold mb-3">{{ 'progress.evolution' | translate }}</h2>
+          @if (evolucion().length === 0) {
+            <p class="text-secondary mb-0">{{ 'progress.noEvolution' | translate }}</p>
+          } @else {
+            <div class="d-flex align-items-end gap-3" style="height: 170px" aria-hidden="true">
+              @for (intento of evolucion(); track intento.id) {
+                <div class="flex-fill d-flex flex-column align-items-center justify-content-end h-100 small">
+                  <strong>{{ numero(intento.puntuacion ?? 0) }}</strong>
+                  <div class="w-100 bg-primary rounded-top" [style.height.%]="intento.puntuacion ?? 0"></div>
+                  <span class="text-secondary">{{ intento.fechaInicio | date: 'dd/MM' }}</span>
+                </div>
+              }
+            </div>
+            <p class="small text-secondary mt-2 mb-0">{{ 'progress.chartNote' | translate }}</p>
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="col-lg-5" aria-labelledby="recomendaciones-titulo">
+      <div class="card h-100">
+        <div class="card-body">
+          <h2 id="recomendaciones-titulo" class="h6 fw-bold mb-3">{{ 'progress.recommendations' | translate }}</h2>
+          @for (r of recomendaciones(); track r.id) {
+            <div class="mb-3">
+              <span [class]="'badge text-bg-' + colorActividad(r.tipoActividad)">{{ 'activity.' + r.tipoActividad | translate }}</span>
+              <span class="fw-semibold ms-1">{{ r.temaNombre }}</span>
+              <p class="small mb-0">{{ r.motivo }}</p>
+            </div>
+          } @empty {
+            <p class="text-secondary mb-0">{{ 'progress.noRecommendations' | translate }}</p>
+          }
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <section class="mt-4" aria-labelledby="historial-titulo">
+    <h2 id="historial-titulo" class="h5 fw-bold mb-3">{{ 'progress.history' | translate }}</h2>
+    @if (historial().length === 0) {
+      <p class="text-secondary">{{ 'progress.noHistory' | translate }}</p>
+    } @else {
+      <div class="table-responsive card">
+        <table class="table table-hover mb-0 align-middle">
+          <caption class="visually-hidden">{{ 'progress.history' | translate }}</caption>
+          <thead>
+            <tr>
+              <th scope="col">{{ 'audit.date' | translate }}</th>
+              <th scope="col">{{ 'progress.activity' | translate }}</th>
+              <th scope="col">{{ 'common.status' | translate }}</th>
+              <th scope="col">{{ 'progress.score' | translate }}</th>
+              <th scope="col"><span class="visually-hidden">{{ 'common.actions' | translate }}</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (intento of historial(); track intento.id) {
+              <tr>
+                <td class="text-nowrap">{{ intento.fechaInicio | date: 'yyyy-MM-dd HH:mm' }}</td>
+                <td>{{ intento.evaluacionNombre }}</td>
+                <td>{{ 'state.' + intento.estado | translate }}</td>
+                <td>{{ intento.puntuacion === null ? '—' : numero(intento.puntuacion) + ' %' }}</td>
+                <td class="text-end">
+                  @if (intento.estado === 'FINALIZADO') {
+                    <a class="btn btn-outline-primary btn-sm" [routerLink]="['/attempts', intento.id, 'result']">{{ 'progress.view' | translate }}</a>
+                  } @else {
+                    <a class="btn btn-primary btn-sm" [routerLink]="['/attempts', intento.id]">{{ 'quizzes.continue' | translate }}</a>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </section>
+}

@@ -14,7 +14,8 @@
   },
   "nav": {
     "courses": "Courses",
-    "audit": "Audit log"
+    "audit": "Audit log",
+    "progress": "My progress"
   },
   "layout": {
     "skip": "Skip to content",
@@ -30,7 +31,7 @@
   },
   "login": {
     "tagline": "Practice what you need, when you need it.",
-    "description": "Evolua analyzes your results by topic and recommends you practice activities.",
+    "description": "Evolua analyzes your results by topic and recommends your next practice activity.",
     "title": "Log in",
     "subtitle": "Use the account assigned by your institution.",
     "email": "Email",
@@ -57,7 +58,9 @@
     "name": "Name",
     "nameRequired": "The name is required (maximum 150 characters).",
     "description": "Description",
-    "backToList": "Back to my courses"
+    "backToList": "Back to my courses",
+    "recommendation": "Recommendation for you",
+    "viewProgress": "View my progress"
   },
   "topics": {
     "title": "Topics",
@@ -121,5 +124,116 @@
     "forbiddenText": "You do not have permission to view this page.",
     "notFoundTitle": "Page not found",
     "notFoundText": "The page you are looking for does not exist."
+  },
+  "activity": {
+    "REFUERZO": "Reinforcement",
+    "PRACTICA_ADICIONAL": "Additional practice",
+    "CONFIRMACION": "Confirmation",
+    "AVANZADO": "Advanced"
+  },
+  "level": {
+    "SIN_DATOS": "No data",
+    "REFUERZO": "Reinforcement",
+    "INTERMEDIO": "Intermediate",
+    "AVANZADO": "Advanced",
+    "DOMINADO": "Mastered"
+  },
+  "state": {
+    "EN_CURSO": "In progress",
+    "FINALIZADO": "Finished"
+  },
+  "quizType": {
+    "INICIAL": "Initial",
+    "FORMATIVA": "Formative",
+    "CONFIRMACION": "Confirmation"
+  },
+  "quizzes": {
+    "title": "Quizzes",
+    "new": "New quiz",
+    "emptyTeacher": "This course has no quizzes yet.",
+    "emptyStudent": "This course has no quizzes available yet.",
+    "questionsCount": "{{count}} questions",
+    "unlimited": "Unlimited attempts",
+    "attemptsAllowed": "Up to {{count}} attempts",
+    "attemptsUsed": "Attempts: {{used}} of {{allowed}}",
+    "start": "Start",
+    "continue": "Continue",
+    "limitReached": "You reached the maximum number of attempts.",
+    "confirmDeactivate": "Deactivate the quiz “{{name}}”? Students will no longer see it.",
+    "formNew": "New quiz",
+    "formEdit": "Edit quiz",
+    "name": "Name",
+    "nameRequired": "The name is required (maximum 150 characters).",
+    "type": "Type",
+    "attempts": "Allowed attempts",
+    "attemptsHelp": "Empty means unlimited.",
+    "questions": "Quiz questions",
+    "questionsHelp": "Choose questions from the course topics. They are presented in the order shown here.",
+    "questionsRequired": "Select at least one question.",
+    "noQuestions": "The course has no questions yet. Create questions in its topics.",
+    "inactiveQuestion": "Inactive",
+    "selected": "{{count}} questions selected"
+  },
+  "enrollments": {
+    "title": "Enrolled students",
+    "email": "Student email",
+    "emailInvalid": "Enter a valid email.",
+    "add": "Enroll",
+    "empty": "There are no enrolled students yet.",
+    "student": "Student",
+    "emailColumn": "Email",
+    "date": "Enrolled",
+    "remove": "Remove",
+    "added": "{{name}} was enrolled.",
+    "confirmRemove": "Remove the enrollment of {{name}}?"
+  },
+  "attempt": {
+    "questionOf": "Question {{current}} of {{total}}",
+    "progress": "Quiz progress",
+    "chooseAnswer": "Choose an answer",
+    "previous": "Previous",
+    "next": "Next",
+    "finish": "Finish",
+    "saving": "Saving…",
+    "questions": "Quiz questions",
+    "goTo": "Go to question {{number}}",
+    "answered": "Answered: {{answered}} of {{total}}",
+    "confirmUnanswered": "You have {{count}} unanswered questions, which will count as incorrect. Finish anyway?"
+  },
+  "result": {
+    "title": "Your result",
+    "score": "Score",
+    "correctOf": "{{correct}} of {{total}} correct answers",
+    "unanswered": "{{count}} unanswered questions",
+    "byTopic": "By topic",
+    "topicLine": "{{correct}} of {{total}} · {{percent}} %",
+    "recommendations": "Recommendations",
+    "why": "Why?",
+    "suggestedDifficulty": "Suggested difficulty",
+    "noRecommendations": "There are no recommendations yet.",
+    "backToCourses": "Back to my courses",
+    "review": "Review your answers",
+    "correct": "Correct answer",
+    "incorrect": "Incorrect answer",
+    "yourAnswer": "Your answer",
+    "correctAnswer": "Correct",
+    "feedback": "Feedback"
+  },
+  "progress": {
+    "title": "My progress",
+    "topics": "Topics",
+    "empty": "You are not enrolled in courses with topics yet.",
+    "answers": "{{correct}} of {{total}} answers",
+    "satisfactory": "{{count}} satisfactory results",
+    "evolution": "Evolution of your scores",
+    "noEvolution": "You have not finished any quiz yet.",
+    "chartNote": "The values also appear in the attempt history.",
+    "recommendations": "Current recommendations",
+    "noRecommendations": "There are no recommendations yet.",
+    "history": "Attempt history",
+    "noHistory": "You have not made any attempts yet.",
+    "activity": "Activity",
+    "score": "Score",
+    "view": "View result"
   }
 }

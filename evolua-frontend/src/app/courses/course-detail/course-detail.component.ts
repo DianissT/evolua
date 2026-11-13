@@ -1,5 +1,5 @@
 import { Component, OnInit, computed, inject, input, signal } from '@angular/core';
-import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
@@ -9,14 +9,16 @@ import { mensajeDeError } from '../../core/http/error-message';
 import { Curso, Tema } from '../../core/models/curso.model';
 import { CourseService } from '../../core/services/course.service';
 import { TopicService } from '../../core/services/topic.service';
+import { QuizListComponent } from '../../quizzes/quiz-list/quiz-list.component';
 import { AlertComponent } from '../../shared/alert/alert.component';
+import { EnrollmentPanelComponent } from '../enrollment-panel/enrollment-panel.component';
 
 /**
- * Detalle de un curso y sus temas. El docente administra los temas; el estudiante solo los consulta.
+ * Detalle de un curso con sus temas. El docente administra los temas y el estudiante solo los consulta.
  */
 @Component({
   selector: 'app-course-detail',
-  imports: [FormsModule, ReactiveFormsModule, RouterLink, TranslatePipe, AlertComponent],
+  imports: [ReactiveFormsModule, RouterLink, TranslatePipe, AlertComponent, QuizListComponent, EnrollmentPanelComponent],
   templateUrl: './course-detail.component.html',
 })
 export class CourseDetailComponent implements OnInit {
@@ -55,27 +57,20 @@ export class CourseDetailComponent implements OnInit {
     });
   }
 
-
   agregarTema(): void {
-  this.nuevoEnviado.set(true);
-
-  if (this.nuevoTema.invalid) {
-    return;
+    this.nuevoEnviado.set(true);
+    if (this.nuevoTema.invalid) {
+      return;
+    }
+    this.temasApi.crear({ cursoId: this.idNumerico(), nombre: this.nuevoTema.value.trim() }).subscribe({
+      next: () => {
+        this.nuevoTema.reset();
+        this.nuevoEnviado.set(false);
+        this.cargarTemas();
+      },
+      error: (error: unknown) => this.error.set(mensajeDeError(error, this.translate)),
+    });
   }
-
-  this.temasApi.crear({
-    cursoId: this.idNumerico(),
-    nombre: this.nuevoTema.value.trim()
-  }).subscribe({
-    next: () => {
-      this.nuevoTema.reset();
-      this.nuevoEnviado.set(false);
-      this.cargarTemas();
-    },
-    error: (error: unknown) =>
-      this.error.set(mensajeDeError(error, this.translate)),
-  });
-}
 
   editar(tema: Tema): void {
     this.nombreEdicion.setValue(tema.nombre);

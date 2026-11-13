@@ -14,7 +14,8 @@
   },
   "nav": {
     "courses": "Cursos",
-    "audit": "Auditoría"
+    "audit": "Auditoría",
+    "progress": "Mi progreso"
   },
   "layout": {
     "skip": "Saltar al contenido",
@@ -30,7 +31,7 @@
   },
   "login": {
     "tagline": "Practica lo que necesitas, cuando lo necesitas.",
-    "description": "Evolua analiza tus resultados por tema y te recomienda actividades de práctica.",
+    "description": "Evolua analiza tus resultados por tema y te recomienda la siguiente actividad de práctica.",
     "title": "Inicia sesión",
     "subtitle": "Usa la cuenta que te asignó tu institución.",
     "email": "Correo",
@@ -57,7 +58,9 @@
     "name": "Nombre",
     "nameRequired": "El nombre es obligatorio (máximo 150 caracteres).",
     "description": "Descripción",
-    "backToList": "Volver a mis cursos"
+    "backToList": "Volver a mis cursos",
+    "recommendation": "Recomendación para ti",
+    "viewProgress": "Ver mi progreso"
   },
   "topics": {
     "title": "Temas",
@@ -121,5 +124,116 @@
     "forbiddenText": "No tienes permiso para ver esta página.",
     "notFoundTitle": "Página no encontrada",
     "notFoundText": "La página que buscas no existe."
+  },
+  "activity": {
+    "REFUERZO": "Refuerzo",
+    "PRACTICA_ADICIONAL": "Práctica adicional",
+    "CONFIRMACION": "Confirmación",
+    "AVANZADO": "Avanzado"
+  },
+  "level": {
+    "SIN_DATOS": "Sin datos",
+    "REFUERZO": "Refuerzo",
+    "INTERMEDIO": "Intermedio",
+    "AVANZADO": "Avanzado",
+    "DOMINADO": "Dominado"
+  },
+  "state": {
+    "EN_CURSO": "En curso",
+    "FINALIZADO": "Finalizado"
+  },
+  "quizType": {
+    "INICIAL": "Inicial",
+    "FORMATIVA": "Formativa",
+    "CONFIRMACION": "Confirmación"
+  },
+  "quizzes": {
+    "title": "Evaluaciones",
+    "new": "Nueva evaluación",
+    "emptyTeacher": "Este curso aún no tiene evaluaciones.",
+    "emptyStudent": "Este curso aún no tiene evaluaciones disponibles.",
+    "questionsCount": "{{count}} preguntas",
+    "unlimited": "Intentos ilimitados",
+    "attemptsAllowed": "Hasta {{count}} intentos",
+    "attemptsUsed": "Intentos: {{used}} de {{allowed}}",
+    "start": "Iniciar",
+    "continue": "Continuar",
+    "limitReached": "Alcanzaste el máximo de intentos.",
+    "confirmDeactivate": "¿Desactivar la evaluación «{{name}}»? Los estudiantes dejarán de verla.",
+    "formNew": "Nueva evaluación",
+    "formEdit": "Editar evaluación",
+    "name": "Nombre",
+    "nameRequired": "El nombre es obligatorio (máximo 150 caracteres).",
+    "type": "Tipo",
+    "attempts": "Intentos permitidos",
+    "attemptsHelp": "Vacío significa ilimitados.",
+    "questions": "Preguntas de la evaluación",
+    "questionsHelp": "Elige las preguntas de los temas del curso. Se presentan en el orden en que aparecen aquí.",
+    "questionsRequired": "Selecciona al menos una pregunta.",
+    "noQuestions": "El curso aún no tiene preguntas. Crea preguntas en sus temas.",
+    "inactiveQuestion": "Inactiva",
+    "selected": "{{count}} preguntas seleccionadas"
+  },
+  "enrollments": {
+    "title": "Estudiantes matriculados",
+    "email": "Correo del estudiante",
+    "emailInvalid": "Escribe un correo válido.",
+    "add": "Matricular",
+    "empty": "Aún no hay estudiantes matriculados.",
+    "student": "Estudiante",
+    "emailColumn": "Correo",
+    "date": "Matrícula",
+    "remove": "Quitar",
+    "added": "{{name}} fue matriculado.",
+    "confirmRemove": "¿Quitar la matrícula de {{name}}?"
+  },
+  "attempt": {
+    "questionOf": "Pregunta {{current}} de {{total}}",
+    "progress": "Progreso de la evaluación",
+    "chooseAnswer": "Elige una respuesta",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "finish": "Finalizar",
+    "saving": "Guardando…",
+    "questions": "Preguntas de la evaluación",
+    "goTo": "Ir a la pregunta {{number}}",
+    "answered": "Respondidas: {{answered}} de {{total}}",
+    "confirmUnanswered": "Tienes {{count}} preguntas sin responder, que contarán como incorrectas. ¿Finalizar de todos modos?"
+  },
+  "result": {
+    "title": "Tu resultado",
+    "score": "Puntuación",
+    "correctOf": "{{correct}} de {{total}} respuestas correctas",
+    "unanswered": "{{count}} preguntas sin responder",
+    "byTopic": "Por tema",
+    "topicLine": "{{correct}} de {{total}} · {{percent}} %",
+    "recommendations": "Recomendaciones",
+    "why": "¿Por qué?",
+    "suggestedDifficulty": "Dificultad sugerida",
+    "noRecommendations": "Aún no hay recomendaciones.",
+    "backToCourses": "Volver a mis cursos",
+    "review": "Revisa tus respuestas",
+    "correct": "Respuesta correcta",
+    "incorrect": "Respuesta incorrecta",
+    "yourAnswer": "Tu respuesta",
+    "correctAnswer": "Correcta",
+    "feedback": "Retroalimentación"
+  },
+  "progress": {
+    "title": "Mi progreso",
+    "topics": "Temas",
+    "empty": "Aún no estás matriculado en cursos con temas.",
+    "answers": "{{correct}} de {{total}} respuestas",
+    "satisfactory": "{{count}} resultados satisfactorios",
+    "evolution": "Evolución de tus puntuaciones",
+    "noEvolution": "Aún no has finalizado evaluaciones.",
+    "chartNote": "Los valores también aparecen en el historial de intentos.",
+    "recommendations": "Recomendaciones actuales",
+    "noRecommendations": "Aún no hay recomendaciones.",
+    "history": "Historial de intentos",
+    "noHistory": "Aún no has realizado intentos.",
+    "activity": "Actividad",
+    "score": "Puntuación",
+    "view": "Ver resultado"
   }
 }

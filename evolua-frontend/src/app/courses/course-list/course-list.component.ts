@@ -6,11 +6,14 @@ import { Observable } from 'rxjs';
 import { AuthService } from '../../core/auth/auth.service';
 import { mensajeDeError } from '../../core/http/error-message';
 import { Curso } from '../../core/models/curso.model';
+import { Recomendacion } from '../../core/models/progreso.model';
 import { CourseService } from '../../core/services/course.service';
+import { ProgressService } from '../../core/services/progress.service';
+import { colorActividad } from '../../core/util/nivel';
 import { AlertComponent } from '../../shared/alert/alert.component';
 
 /**
- * Lista de cursos: los del docente o los cursos activos en los que está matriculado el estudiante.
+ * Lista de cursos: los de cada docente o los cursos activos en los que está matriculado un estudiante.
  */
 @Component({
   selector: 'app-course-list',
@@ -21,7 +24,10 @@ export class CourseListComponent implements OnInit {
   private readonly cursos = inject(CourseService);
   private readonly auth = inject(AuthService);
   private readonly translate = inject(TranslateService);
+  private readonly progreso = inject(ProgressService);
 
+  readonly color = colorActividad;
+  readonly recomendacion = signal<Recomendacion | null>(null);
   readonly lista = signal<Curso[]>([]);
   readonly cargando = signal(true);
   readonly error = signal<string | null>(null);
@@ -29,6 +35,12 @@ export class CourseListComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargar();
+    if (!this.esDocente()) {
+      this.progreso.misRecomendaciones().subscribe({
+        next: (recomendaciones) => this.recomendacion.set(recomendaciones[0] ?? null),
+        error: () => undefined,
+      });
+    }
   }
 
   alternarActivo(curso: Curso): void {

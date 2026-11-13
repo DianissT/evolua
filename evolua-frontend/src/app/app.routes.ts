@@ -42,6 +42,18 @@ export const routes: Routes = [
               import('./courses/course-detail/course-detail.component').then((m) => m.CourseDetailComponent),
           },
           {
+            path: ':courseId/quizzes/new',
+            canActivate: [rolGuard('DOCENTE')],
+            loadComponent: () =>
+              import('./quizzes/quiz-form/quiz-form.component').then((m) => m.QuizFormComponent),
+          },
+          {
+            path: ':courseId/quizzes/:quizId/edit',
+            canActivate: [rolGuard('DOCENTE')],
+            loadComponent: () =>
+              import('./quizzes/quiz-form/quiz-form.component').then((m) => m.QuizFormComponent),
+          },
+          {
             path: ':courseId/topics/:topicId/questions',
             canActivate: [rolGuard('DOCENTE')],
             loadComponent: () =>
@@ -60,6 +72,23 @@ export const routes: Routes = [
               import('./questions/question-form/question-form.component').then((m) => m.QuestionFormComponent),
           },
         ],
+      },
+      {
+        path: 'attempts/:attemptId',
+        canActivate: [rolGuard('ESTUDIANTE')],
+        loadComponent: () => import('./quizzes/attempt/attempt.component').then((m) => m.AttemptComponent),
+      },
+      {
+        path: 'attempts/:attemptId/result',
+        canActivate: [rolGuard('ESTUDIANTE')],
+        loadComponent: () =>
+          import('./quizzes/attempt-result/attempt-result.component').then((m) => m.AttemptResultComponent),
+      },
+      {
+        path: 'progress',
+        canActivate: [rolGuard('ESTUDIANTE')],
+        loadComponent: () =>
+          import('./progress/my-progress/my-progress.component').then((m) => m.MyProgressComponent),
       },
       {
         path: 'admin/audit',

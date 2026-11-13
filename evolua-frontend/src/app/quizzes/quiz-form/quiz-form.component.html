@@ -1,0 +1,85 @@
+<h1 class="h3 fw-bold mb-4">{{ (quizNumerico() === null ? 'quizzes.formNew' : 'quizzes.formEdit') | translate }}</h1>
+
+<app-alert [mensaje]="error()" />
+
+<form class="card" style="max-width: 820px" [formGroup]="formulario" (ngSubmit)="guardar()" novalidate>
+  <div class="card-body p-4">
+    <div class="row g-3 mb-4">
+      <div class="col-md-6">
+        <label for="nombre-evaluacion" class="form-label fw-semibold">{{ 'quizzes.name' | translate }}</label>
+        <input
+          id="nombre-evaluacion"
+          type="text"
+          class="form-control"
+          formControlName="nombre"
+          [class.is-invalid]="enviado() && formulario.controls.nombre.invalid"
+          [attr.aria-invalid]="enviado() && formulario.controls.nombre.invalid"
+          aria-describedby="nombre-evaluacion-error"
+        />
+        @if (enviado() && formulario.controls.nombre.invalid) {
+          <div id="nombre-evaluacion-error" class="invalid-feedback">{{ 'quizzes.nameRequired' | translate }}</div>
+        }
+      </div>
+      <div class="col-md-3">
+        <label for="tipo-evaluacion" class="form-label fw-semibold">{{ 'quizzes.type' | translate }}</label>
+        <select id="tipo-evaluacion" class="form-select" formControlName="tipo">
+          @for (tipo of tipos; track tipo) {
+            <option [ngValue]="tipo">{{ 'quizType.' + tipo | translate }}</option>
+          }
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label for="intentos-evaluacion" class="form-label fw-semibold">{{ 'quizzes.attempts' | translate }}</label>
+        <input
+          id="intentos-evaluacion"
+          type="number"
+          min="1"
+          class="form-control"
+          formControlName="intentosPermitidos"
+          [class.is-invalid]="enviado() && formulario.controls.intentosPermitidos.invalid"
+          aria-describedby="intentos-ayuda"
+        />
+        <div id="intentos-ayuda" class="form-text">{{ 'quizzes.attemptsHelp' | translate }}</div>
+      </div>
+    </div>
+
+    <fieldset class="mb-4">
+      <legend class="form-label fw-semibold fs-6">{{ 'quizzes.questions' | translate }}</legend>
+      <p class="small text-secondary">{{ 'quizzes.questionsHelp' | translate }}</p>
+      @for (grupo of grupos(); track grupo.tema.id) {
+        <h2 class="h6 fw-bold mt-3">{{ grupo.tema.nombre }}</h2>
+        @for (pregunta of grupo.preguntas; track pregunta.id) {
+          <div class="form-check mb-1">
+            <input
+              #caja
+              class="form-check-input"
+              type="checkbox"
+              [id]="'pregunta-' + pregunta.id"
+              [checked]="seleccion().includes(pregunta.id)"
+              [disabled]="!pregunta.activa && !seleccion().includes(pregunta.id)"
+              (change)="alternar(pregunta.id, caja.checked)"
+            />
+            <label class="form-check-label" [for]="'pregunta-' + pregunta.id">
+              {{ partes(pregunta.enunciado).texto }}
+              <span class="badge text-bg-light border ms-1">{{ 'difficulty.' + pregunta.dificultad | translate }}</span>
+              @if (!pregunta.activa) {
+                <span class="badge text-bg-secondary ms-1">{{ 'quizzes.inactiveQuestion' | translate }}</span>
+              }
+            </label>
+          </div>
+        }
+      } @empty {
+        <p class="text-secondary">{{ 'quizzes.noQuestions' | translate }}</p>
+      }
+      @if (enviado() && seleccion().length === 0) {
+        <div class="text-danger small mt-2" role="alert">{{ 'quizzes.questionsRequired' | translate }}</div>
+      }
+      <p class="small text-secondary mt-3 mb-0">{{ 'quizzes.selected' | translate: { count: seleccion().length } }}</p>
+    </fieldset>
+
+    <div class="d-flex gap-2">
+      <button type="submit" class="btn btn-primary" [disabled]="guardando()">{{ 'common.save' | translate }}</button>
+      <a class="btn btn-outline-secondary" [routerLink]="['/courses', cursoNumerico()]">{{ 'common.cancel' | translate }}</a>
+    </div>
+  </div>
+</form>

@@ -10,9 +10,7 @@ interface Enlace {
   clave: string;
 }
 
-/**
- * Estructura común de las pantallas autenticadas: barra de navegación según el rol y contenido principal.
- */
+/**Estructura común de las pantallas autenticadas: barra de navegación según el rol y contenido principal.*/
 @Component({
   selector: 'app-layout',
   imports: [RouterLink, RouterLinkActive, RouterOutlet, TranslatePipe, LanguageSwitcherComponent],
@@ -23,11 +21,19 @@ export class LayoutComponent {
 
   readonly usuario = this.auth.usuario;
   readonly menuAbierto = signal(false);
-  readonly enlaces = computed<Enlace[]>(() =>
-    this.auth.rol() === 'ADMIN'
-      ? [{ ruta: '/admin/audit', clave: 'nav.audit' }]
-      : [{ ruta: '/courses', clave: 'nav.courses' }],
-  );
+  readonly enlaces = computed<Enlace[]>(() => {
+    switch (this.auth.rol()) {
+      case 'ADMIN':
+        return [{ ruta: '/admin/audit', clave: 'nav.audit' }];
+      case 'ESTUDIANTE':
+        return [
+          { ruta: '/courses', clave: 'nav.courses' },
+          { ruta: '/progress', clave: 'nav.progress' },
+        ];
+      default:
+        return [{ ruta: '/courses', clave: 'nav.courses' }];
+    }
+  });
 
   alternarMenu(): void {
     this.menuAbierto.update((abierto) => !abierto);
