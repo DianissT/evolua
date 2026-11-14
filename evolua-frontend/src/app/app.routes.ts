@@ -85,6 +85,12 @@ export const routes: Routes = [
           import('./quizzes/attempt-result/attempt-result.component').then((m) => m.AttemptResultComponent),
       },
       {
+        path: 'practice',
+        canActivate: [rolGuard('ESTUDIANTE')],
+        loadComponent: () =>
+          import('./practice/practice-start/practice-start.component').then((m) => m.PracticeStartComponent),
+      },
+      {
         path: 'progress',
         canActivate: [rolGuard('ESTUDIANTE')],
         loadComponent: () =>

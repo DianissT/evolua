@@ -38,4 +38,14 @@ public interface RespuestaRepository extends JpaRepository<Respuesta, Long> {
             + "and p.tema.id in :temaIds group by i.id, p.tema.id")
     List<ResumenIntentoTema> resumenPorIntentoYTema(@Param("estudianteId") Long estudianteId,
             @Param("temaIds") Collection<Long> temaIds);
+
+    /**
+     * Última vez que el estudiante recibió cada pregunta del tema, en cualquier intento (evaluación o práctica).
+     * Las preguntas que nunca ha recibido no aparecen. Sirve para priorizar las menos recientes en la práctica.
+     */
+    @Query("select p.id as preguntaId, max(i.fechaInicio) as ultimaVez "
+            + "from Respuesta r join r.pregunta p join r.intento i "
+            + "where i.estudiante.id = :estudianteId and p.tema.id = :temaId group by p.id")
+    List<UltimaVezPregunta> ultimaVezPorPregunta(@Param("estudianteId") Long estudianteId,
+            @Param("temaId") Long temaId);
 }

@@ -5,7 +5,14 @@
 }
 
 @if (resultado(); as r) {
-  <p class="small text-secondary mb-1">{{ r.evaluacionNombre }} · {{ 'state.' + r.estado | translate }}</p>
+  <p class="small text-secondary mb-1">
+    @if (r.tipo === 'PRACTICA') {
+      {{ 'practice.attemptTitle' | translate: { topic: r.temaNombre } }}
+    } @else {
+      {{ r.evaluacionNombre }}
+    }
+    · {{ 'state.' + r.estado | translate }}
+  </p>
   <h1 class="h3 fw-bold mb-4">{{ 'result.title' | translate }}</h1>
 
   <div class="row g-4 align-items-start">
@@ -59,6 +66,9 @@
         <p class="text-secondary">{{ 'result.noRecommendations' | translate }}</p>
       }
       <div class="d-flex flex-wrap gap-2">
+        @if (r.tipo === 'PRACTICA') {
+          <a class="btn btn-success" routerLink="/practice" [queryParams]="{ temaId: r.temaId }">{{ 'practice.again' | translate }}</a>
+        }
         <a class="btn btn-primary" routerLink="/progress">{{ 'courses.viewProgress' | translate }}</a>
         <a class="btn btn-outline-primary" routerLink="/courses">{{ 'result.backToCourses' | translate }}</a>
       </div>

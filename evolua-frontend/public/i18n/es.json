@@ -15,7 +15,8 @@
   "nav": {
     "courses": "Cursos",
     "audit": "Auditoría",
-    "progress": "Mi progreso"
+    "progress": "Mi progreso",
+    "practice": "Práctica"
   },
   "layout": {
     "skip": "Saltar al contenido",
@@ -235,5 +236,31 @@
     "activity": "Actividad",
     "score": "Puntuación",
     "view": "Ver resultado"
+  },
+  "practice": {
+    "title": "Práctica",
+    "intro": "Practica un tema cuando quieras: deja que Evolua elija las preguntas según tu nivel o elige tú la dificultad.",
+    "topic": "Tema",
+    "chooseTopic": "Elige un tema",
+    "topicRequired": "Elige un tema para practicar.",
+    "noTopics": "No hay temas disponibles. Matricúlate en un curso con temas activos.",
+    "mode": "Modalidad",
+    "auto": "Automática",
+    "autoHelp": "Evolua elige las preguntas según tu recomendación actual y prioriza las que hace más tiempo no ves. Si no hay suficientes de esa dificultad, completa con las más cercanas.",
+    "free": "Libre",
+    "freeHelp": "Tú eliges la dificultad y la cantidad de preguntas.",
+    "autoWithRec": "Tu recomendación actual en este tema es «{{activity}}». Se usarán preguntas de dificultad",
+    "autoWithoutRec": "Aún no tienes recomendación en este tema. Se empezará con dificultad",
+    "difficulty": "Dificultad",
+    "anyDifficulty": "Cualquiera",
+    "count": "Cantidad de preguntas",
+    "countHelp": "Entre 1 y 20. Si lo dejas vacío se usa la cantidad predeterminada.",
+    "countInvalid": "La cantidad debe estar entre 1 y 20.",
+    "start": "Empezar práctica",
+    "starting": "Preparando…",
+    "attemptTitle": "Práctica: {{topic}}",
+    "rowLabel": "Práctica: {{topic}}",
+    "again": "Practicar este tema",
+    "practiceTopic": "Practicar"
   }
 }

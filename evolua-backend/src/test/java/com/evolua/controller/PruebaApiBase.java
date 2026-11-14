@@ -146,7 +146,11 @@ abstract class PruebaApiBase {
     }
 
     protected Long crearPregunta(Long temaId, String enunciado) throws Exception {
-        String cuerpo = "{\"temaId\":" + temaId + ",\"enunciado\":\"" + enunciado + "\",\"dificultad\":1,"
+        return crearPregunta(temaId, enunciado, 1);
+    }
+
+    protected Long crearPregunta(Long temaId, String enunciado, int dificultad) throws Exception {
+        String cuerpo = "{\"temaId\":" + temaId + ",\"enunciado\":\"" + enunciado + "\",\"dificultad\":" + dificultad + ","
                 + "\"tipo\":\"SELECCION_MULTIPLE\",\"retroalimentacion\":\"Explicación de " + enunciado + "\","
                 + "\"opciones\":[{\"texto\":\"Correcta\",\"esCorrecta\":true},"
                 + "{\"texto\":\"Incorrecta\",\"esCorrecta\":false}]}";

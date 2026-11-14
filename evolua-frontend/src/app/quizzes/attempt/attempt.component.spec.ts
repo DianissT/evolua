@@ -10,8 +10,11 @@ import { AttemptComponent } from './attempt.component';
 
 const intento: Intento = {
   id: 7,
+  tipo: 'EVALUACION',
   evaluacionId: 1,
   evaluacionNombre: 'Evaluación inicial',
+  temaId: null,
+  temaNombre: null,
   estado: 'EN_CURSO',
   fechaInicio: '2026-11-13T10:00:00',
   preguntas: [

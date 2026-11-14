@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.evolua.entity.EstadoIntento;
 import com.evolua.entity.Intento;
+import com.evolua.entity.TipoIntento;
 
 /**
  * Repositorio de acceso a datos de la entidad Intento.
@@ -19,6 +20,9 @@ public interface IntentoRepository extends JpaRepository<Intento, Long> {
 
     Optional<Intento> findByEstudianteIdAndEvaluacionIdAndEstado(Long estudianteId, Long evaluacionId,
             EstadoIntento estado);
+
+    Optional<Intento> findFirstByEstudianteIdAndTemaIdAndTipoAndEstadoOrderByFechaInicioDesc(Long estudianteId,
+            Long temaId, TipoIntento tipo, EstadoIntento estado);
 
     long countByEstudianteIdAndEvaluacionId(Long estudianteId, Long evaluacionId);
 

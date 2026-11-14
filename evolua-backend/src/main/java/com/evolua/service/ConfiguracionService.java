@@ -21,6 +21,10 @@ public class ConfiguracionService {
     public static final String UMBRAL_DOMINIO = "umbral_dominio";
     public static final String MIN_RESPUESTAS_TEMA = "min_respuestas_tema";
     public static final String INTENTOS_PARA_DOMINIO = "intentos_para_dominio";
+    public static final String PREGUNTAS_POR_PRACTICA = "preguntas_por_practica";
+    
+    /** Cantidad de preguntas de una práctica cuando el parámetro no está configurado. */
+    public static final int PREGUNTAS_POR_PRACTICA_DEFECTO = 5;
 
     private final ConfiguracionRepository configuracion;
 
@@ -40,6 +44,21 @@ public class ConfiguracionService {
                 .collect(Collectors.toMap(Configuracion::getClave, Configuracion::getValor));
         return new ParametrosMotor(entero(valores, UMBRAL_REFUERZO), entero(valores, UMBRAL_DOMINIO),
                 entero(valores, MIN_RESPUESTAS_TEMA), entero(valores, INTENTOS_PARA_DOMINIO));
+    }
+
+    /**
+     * Cantidad de preguntas de una práctica. Si el parámetro no existe se usa
+     * {@value #PREGUNTAS_POR_PRACTICA_DEFECTO}.
+     */
+    @Transactional(readOnly = true)
+    public int preguntasPorPractica() {
+        int cantidad = configuracion.findById(PREGUNTAS_POR_PRACTICA)
+                .map(fila -> entero(Map.of(PREGUNTAS_POR_PRACTICA, fila.getValor()), PREGUNTAS_POR_PRACTICA))
+                .orElse(PREGUNTAS_POR_PRACTICA_DEFECTO);
+        if (cantidad < 1) {
+            throw new IllegalStateException("El parámetro " + PREGUNTAS_POR_PRACTICA + " debe ser al menos 1");
+        }
+        return cantidad;
     }
 
     private int entero(Map<String, String> valores, String clave) {

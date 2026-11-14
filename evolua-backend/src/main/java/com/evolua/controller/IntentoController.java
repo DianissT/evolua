@@ -16,11 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.evolua.dto.IntentoIniciado;
 import com.evolua.dto.IntentoResponse;
 import com.evolua.dto.IntentoResumenResponse;
+import com.evolua.dto.PracticaRequest;
 import com.evolua.dto.RespuestaRequest;
 import com.evolua.dto.RespuestaResponse;
 import com.evolua.dto.ResultadoIntentoResponse;
 import com.evolua.security.UsuarioPrincipal;
 import com.evolua.service.IntentoService;
+import com.evolua.service.PracticaService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -40,9 +42,11 @@ import jakarta.validation.Valid;
 public class IntentoController {
 
     private final IntentoService intentoService;
+    private final PracticaService practicaService;
 
-    public IntentoController(IntentoService intentoService) {
+    public IntentoController(IntentoService intentoService, PracticaService practicaService) {
         this.intentoService = intentoService;
+        this.practicaService = practicaService;
     }
 
     @PostMapping("/quizzes/{id}/attempts")
@@ -50,6 +54,17 @@ public class IntentoController {
     public ResponseEntity<IntentoResponse> iniciar(@PathVariable("id") Long id,
             @Parameter(hidden = true) @AuthenticationPrincipal UsuarioPrincipal usuario) {
         IntentoIniciado iniciado = intentoService.iniciar(id, usuario.getId());
+        return ResponseEntity.status(iniciado.nuevo() ? HttpStatus.CREATED : HttpStatus.OK).body(iniciado.intento());
+    }
+
+    @PostMapping("/topics/{topicId}/practice")
+    @Operation(summary = "Inicia una práctica del tema (201) o retoma la que está en curso (200). "
+            + "AUTOMATICA elige las preguntas según la recomendación vigente; LIBRE, según la dificultad y cantidad "
+            + "que pida el estudiante. Sin cuerpo equivale a AUTOMATICA")
+    public ResponseEntity<IntentoResponse> iniciarPractica(@PathVariable("topicId") Long topicId,
+            @Valid @RequestBody(required = false) PracticaRequest solicitud,
+            @Parameter(hidden = true) @AuthenticationPrincipal UsuarioPrincipal usuario) {
+        IntentoIniciado iniciado = practicaService.iniciar(topicId, solicitud, usuario.getId());
         return ResponseEntity.status(iniciado.nuevo() ? HttpStatus.CREATED : HttpStatus.OK).body(iniciado.intento());
     }
 

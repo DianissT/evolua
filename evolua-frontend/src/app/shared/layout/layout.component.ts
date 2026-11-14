@@ -28,6 +28,7 @@ export class LayoutComponent {
       case 'ESTUDIANTE':
         return [
           { ruta: '/courses', clave: 'nav.courses' },
+          { ruta: '/practice', clave: 'nav.practice' },
           { ruta: '/progress', clave: 'nav.progress' },
         ];
       default:

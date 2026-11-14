@@ -49,8 +49,8 @@ import com.evolua.repository.RespuestaRepository;
 import com.evolua.repository.UsuarioRepository;
 
 /**
- * Intentos de evaluaciones fijas. Al iniciar un intento se crean sus filas de respuestas sin opción, que fijan
- * las preguntas asignadas. La calificación y la puntuación se calculan siempre en el servidor, al finalizar.
+ * Intentos de evaluaciones fijas y de práctica. Al iniciar un intento se crean sus filas de respuestas sin opción, que fijan
+ * las preguntas asignadas. La calificación y la puntuación se calculan siempre en el servidor después de finalizar.
  */
 @Service
 public class IntentoService {
@@ -222,7 +222,8 @@ public class IntentoService {
         return BigDecimal.valueOf(correctas).multiply(CIEN).divide(BigDecimal.valueOf(total), 2, RoundingMode.HALF_UP);
     }
 
-    private IntentoResponse vista(Intento intento) {
+    /** Vista del intento en curso, sin las respuestas correctas. Sirve para evaluaciones y prácticas. */
+    IntentoResponse vista(Intento intento) {
         List<Respuesta> filas = respuestas.findByIntentoIdOrderById(intento.getId());
         Map<Long, List<OpcionPregunta>> opcionesPorPregunta = opcionesDe(filas);
         List<PreguntaIntentoResponse> preguntas = filas.stream()
@@ -233,8 +234,9 @@ public class IntentoService {
                                 .toList(),
                         fila.getOpcion() != null ? fila.getOpcion().getId() : null))
                 .toList();
-        return new IntentoResponse(intento.getId(), intento.getEvaluacion().getId(),
-                intento.getEvaluacion().getNombre(), intento.getEstado(), intento.getFechaInicio(), preguntas);
+        return new IntentoResponse(intento.getId(), intento.getTipo(), evaluacionIdDe(intento),
+                evaluacionNombreDe(intento), temaIdDe(intento), temaNombreDe(intento), intento.getEstado(),
+                intento.getFechaInicio(), preguntas);
     }
 
     private ResultadoIntentoResponse construirResultado(Intento intento, List<Respuesta> filas,
@@ -261,10 +263,26 @@ public class IntentoService {
                     pregunta.getRetroalimentacion()));
         }
         int total = filas.size();
-        return new ResultadoIntentoResponse(intento.getId(), intento.getEvaluacion().getId(),
-                intento.getEvaluacion().getNombre(), intento.getEstado(), intento.getFechaInicio(),
-                intento.getFechaFin(), intento.getPuntuacion(), total, correctas, total - correctas - sinResponder,
+        return new ResultadoIntentoResponse(intento.getId(), intento.getTipo(), evaluacionIdDe(intento),
+                evaluacionNombreDe(intento), temaIdDe(intento), temaNombreDe(intento), intento.getEstado(),
+                intento.getFechaInicio(), intento.getFechaFin(), intento.getPuntuacion(), total, correctas, total - correctas - sinResponder,
                 sinResponder, revision, resultadosPorTema(filas), recomendacionesDelIntento);
+    }
+
+    private static Long evaluacionIdDe(Intento intento) {
+        return intento.getEvaluacion() != null ? intento.getEvaluacion().getId() : null;
+    }
+
+    private static String evaluacionNombreDe(Intento intento) {
+        return intento.getEvaluacion() != null ? intento.getEvaluacion().getNombre() : null;
+    }
+
+    private static Long temaIdDe(Intento intento) {
+        return intento.getTema() != null ? intento.getTema().getId() : null;
+    }
+
+    private static String temaNombreDe(Intento intento) {
+        return intento.getTema() != null ? intento.getTema().getNombre() : null;
     }
 
     private List<Long> temasDe(List<Respuesta> filas) {

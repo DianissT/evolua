@@ -8,7 +8,13 @@
   @if (pregunta(); as p) {
     <div class="mx-auto" style="max-width: 820px">
       <div class="d-flex flex-wrap justify-content-between gap-2 small text-secondary mb-2">
-        <span>{{ i.evaluacionNombre }}</span>
+        <span>
+          @if (i.tipo === 'PRACTICA') {
+            {{ 'practice.attemptTitle' | translate: { topic: i.temaNombre } }}
+          } @else {
+            {{ i.evaluacionNombre }}
+          }
+        </span>
         <strong class="text-body">{{ 'attempt.questionOf' | translate: { current: indice() + 1, total: total() } }}</strong>
       </div>
       <div

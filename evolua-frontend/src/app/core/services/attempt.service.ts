@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { Intento, IntentoResumen, RespuestaSolicitud, ResultadoIntento } from '../models/intento.model';
+import { Intento, IntentoResumen, PracticaSolicitud, RespuestaSolicitud, ResultadoIntento } from '../models/intento.model';
 
 /**
  * Acceso a los servicios REST de intentos de las evaluaciones.
@@ -13,6 +13,10 @@ export class AttemptService {
 
   iniciar(evaluacionId: number): Observable<Intento> {
     return this.http.post<Intento>(`/api/v1/quizzes/${evaluacionId}/attempts`, null);
+  }
+
+  iniciarPractica(temaId: number, solicitud: PracticaSolicitud): Observable<Intento> {
+    return this.http.post<Intento>(`/api/v1/topics/${temaId}/practice`, solicitud);
   }
 
   obtener(id: number): Observable<Intento> {

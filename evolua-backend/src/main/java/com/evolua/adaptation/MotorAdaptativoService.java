@@ -27,7 +27,7 @@ import com.evolua.repository.UsuarioRepository;
 import com.evolua.service.ConfiguracionService;
 
 /**
- * Motor adaptativo: después de finalizar un intento recalcula el desempeño del estudiante en cada tema
+ * El motor adaptativo después de que se finaliza un intento recalcula el desempeño del estudiante en cada tema
  * afectado, actualiza su progreso y genera una recomendación con su motivo. Participa en la transacción de
  * quien lo invoca, de modo que calificar, actualizar el progreso y recomendar se guarda todo o nada.
  *
@@ -56,7 +56,7 @@ public class MotorAdaptativoService {
     }
 
     /**
-     * Actualiza el progreso y las recomendaciones del estudiante en los temas indicados.
+     * Actualiza progreso y recomendaciones del estudiante en los temas indicados.
      *
      * @return las recomendaciones recién creadas, una por tema
      */

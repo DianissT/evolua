@@ -1,0 +1,116 @@
+<div class="mx-auto" style="max-width: 760px">
+  <h1 class="h3 fw-bold mb-1">{{ 'practice.title' | translate }}</h1>
+  <p class="text-secondary mb-4">{{ 'practice.intro' | translate }}</p>
+
+  <app-alert [mensaje]="error()" />
+
+  @if (cargando()) {
+    <p class="text-secondary" role="status">{{ 'common.loading' | translate }}</p>
+  } @else if (temas().length === 0 && !error()) {
+    <p class="text-secondary">{{ 'practice.noTopics' | translate }}</p>
+  } @else if (temas().length > 0) {
+    <form class="card" [formGroup]="form" (ngSubmit)="iniciar()" novalidate>
+      <div class="card-body p-4 d-flex flex-column gap-4">
+        <div>
+          <label for="practica-tema" class="form-label fw-semibold">{{ 'practice.topic' | translate }}</label>
+          <select
+            id="practica-tema"
+            class="form-select"
+            formControlName="tema"
+            [class.is-invalid]="enviado() && form.controls.tema.invalid"
+            [attr.aria-invalid]="enviado() && form.controls.tema.invalid"
+          >
+            <option [ngValue]="null" disabled>{{ 'practice.chooseTopic' | translate }}</option>
+            @for (grupo of grupos(); track grupo.cursoNombre) {
+              <optgroup [label]="grupo.cursoNombre">
+                @for (tema of grupo.temas; track tema.temaId) {
+                  <option [ngValue]="tema.temaId">{{ tema.temaNombre }}</option>
+                }
+              </optgroup>
+            }
+          </select>
+          @if (enviado() && form.controls.tema.invalid) {
+            <div class="invalid-feedback d-block">{{ 'practice.topicRequired' | translate }}</div>
+          }
+          @if (progresoTema(); as p) {
+            <p class="small mt-2 mb-0">
+              <span [class]="'badge ' + claseNivel(p.nivel)">{{ 'level.' + p.nivel | translate }}</span>
+            </p>
+          }
+        </div>
+
+        <fieldset>
+          <legend class="form-label fw-semibold">{{ 'practice.mode' | translate }}</legend>
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="radio" id="modo-auto" formControlName="modalidad" value="AUTOMATICA" />
+            <label class="form-check-label" for="modo-auto">
+              <strong>{{ 'practice.auto' | translate }}</strong>
+              <span class="d-block small text-secondary">{{ 'practice.autoHelp' | translate }}</span>
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" id="modo-libre" formControlName="modalidad" value="LIBRE" />
+            <label class="form-check-label" for="modo-libre">
+              <strong>{{ 'practice.free' | translate }}</strong>
+              <span class="d-block small text-secondary">{{ 'practice.freeHelp' | translate }}</span>
+            </label>
+          </div>
+        </fieldset>
+
+        @if (!esLibre() && progresoTema()) {
+          <p class="bg-body-tertiary rounded p-3 mb-0" role="status">
+            @if (recomendacionTema(); as r) {
+              {{ 'practice.autoWithRec' | translate: { activity: ('activity.' + r.tipoActividad | translate) } }}
+              <strong>
+                {{ 'difficulty.' + r.dificultadMinima | translate }}
+                @if (r.dificultadMaxima !== r.dificultadMinima) {
+                  – {{ 'difficulty.' + r.dificultadMaxima | translate }}
+                }
+              </strong>.
+            } @else {
+              {{ 'practice.autoWithoutRec' | translate }} <strong>{{ 'difficulty.2' | translate }}</strong>.
+            }
+          </p>
+        }
+
+        @if (esLibre()) {
+          <div class="row g-3">
+            <div class="col-12 col-md-6">
+              <label for="practica-dificultad" class="form-label fw-semibold">{{ 'practice.difficulty' | translate }}</label>
+              <select id="practica-dificultad" class="form-select" formControlName="dificultad">
+                <option [ngValue]="null">{{ 'practice.anyDifficulty' | translate }}</option>
+                <option [ngValue]="1">{{ 'difficulty.1' | translate }}</option>
+                <option [ngValue]="2">{{ 'difficulty.2' | translate }}</option>
+                <option [ngValue]="3">{{ 'difficulty.3' | translate }}</option>
+              </select>
+            </div>
+            <div class="col-12 col-md-6">
+              <label for="practica-cantidad" class="form-label fw-semibold">{{ 'practice.count' | translate }}</label>
+              <input
+                id="practica-cantidad"
+                type="number"
+                min="1"
+                max="20"
+                class="form-control"
+                formControlName="cantidad"
+                aria-describedby="practica-cantidad-ayuda"
+                [class.is-invalid]="form.controls.cantidad.invalid"
+                [attr.aria-invalid]="form.controls.cantidad.invalid"
+              />
+              @if (form.controls.cantidad.invalid) {
+                <div class="invalid-feedback">{{ 'practice.countInvalid' | translate }}</div>
+              }
+              <div id="practica-cantidad-ayuda" class="form-text">{{ 'practice.countHelp' | translate }}</div>
+            </div>
+          </div>
+        }
+
+        <div>
+          <button type="submit" class="btn btn-primary" [disabled]="enviando()">
+            {{ (enviando() ? 'practice.starting' : 'practice.start') | translate }}
+          </button>
+        </div>
+      </div>
+    </form>
+  }
+</div>

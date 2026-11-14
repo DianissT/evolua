@@ -28,6 +28,9 @@
                   {{ 'progress.answers' | translate: { correct: t.respuestasCorrectas, total: t.totalRespuestas } }} ·
                   {{ 'progress.satisfactory' | translate: { count: t.intentosSatisfactorios } }}
                 </p>
+                <a class="btn btn-outline-primary btn-sm mt-3" routerLink="/practice" [queryParams]="{ temaId: t.temaId }">
+                  {{ 'practice.practiceTopic' | translate }}
+                </a>
               </div>
             </article>
           </div>
@@ -68,6 +71,9 @@
               <span [class]="'badge text-bg-' + colorActividad(r.tipoActividad)">{{ 'activity.' + r.tipoActividad | translate }}</span>
               <span class="fw-semibold ms-1">{{ r.temaNombre }}</span>
               <p class="small mb-0">{{ r.motivo }}</p>
+              @if (r.tipoActividad !== 'CONFIRMACION') {
+                <a class="small" routerLink="/practice" [queryParams]="{ temaId: r.temaId }">{{ 'practice.practiceTopic' | translate }}</a>
+              }
             </div>
           } @empty {
             <p class="text-secondary mb-0">{{ 'progress.noRecommendations' | translate }}</p>
@@ -98,7 +104,13 @@
             @for (intento of historial(); track intento.id) {
               <tr>
                 <td class="text-nowrap">{{ intento.fechaInicio | date: 'yyyy-MM-dd HH:mm' }}</td>
-                <td>{{ intento.evaluacionNombre }}</td>
+                <td>
+                  @if (intento.tipo === 'PRACTICA') {
+                    {{ 'practice.rowLabel' | translate: { topic: intento.temaNombre } }}
+                  } @else {
+                    {{ intento.evaluacionNombre }}
+                  }
+                </td>
                 <td>{{ 'state.' + intento.estado | translate }}</td>
                 <td>{{ intento.puntuacion === null ? '—' : numero(intento.puntuacion) + ' %' }}</td>
                 <td class="text-end">

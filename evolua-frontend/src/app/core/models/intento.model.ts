@@ -2,6 +2,14 @@ import { TipoPregunta } from './pregunta.model';
 import { Recomendacion } from './progreso.model';
 
 export type EstadoIntento = 'EN_CURSO' | 'FINALIZADO';
+export type TipoIntento = 'EVALUACION' | 'PRACTICA';
+export type ModalidadPractica = 'AUTOMATICA' | 'LIBRE';
+
+export interface PracticaSolicitud {
+  modalidad: ModalidadPractica;
+  dificultad?: number | null;
+  cantidad?: number | null;
+}
 
 export interface OpcionIntento {
   id: number;
@@ -18,8 +26,11 @@ export interface PreguntaIntento {
 
 export interface Intento {
   id: number;
-  evaluacionId: number;
-  evaluacionNombre: string;
+  tipo: TipoIntento;
+  evaluacionId: number | null;
+  evaluacionNombre: string | null;
+  temaId: number | null;
+  temaNombre: string | null;
   estado: EstadoIntento;
   fechaInicio: string;
   preguntas: PreguntaIntento[];
@@ -56,8 +67,11 @@ export interface ResultadoTema {
 
 export interface ResultadoIntento {
   id: number;
-  evaluacionId: number;
-  evaluacionNombre: string;
+  tipo: TipoIntento;
+  evaluacionId: number | null;
+  evaluacionNombre: string | null;
+  temaId: number | null;
+  temaNombre: string | null;
   estado: EstadoIntento;
   fechaInicio: string;
   fechaFin: string | null;
@@ -73,9 +87,11 @@ export interface ResultadoIntento {
 
 export interface IntentoResumen {
   id: number;
-  tipo: 'EVALUACION' | 'PRACTICA';
+  tipo: TipoIntento;
   evaluacionId: number | null;
   evaluacionNombre: string | null;
+  temaId: number | null;
+  temaNombre: string | null;
   estado: EstadoIntento;
   fechaInicio: string;
   fechaFin: string | null;

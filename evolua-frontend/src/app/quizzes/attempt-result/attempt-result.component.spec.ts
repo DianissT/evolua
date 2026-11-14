@@ -11,8 +11,11 @@ import { AttemptResultComponent } from './attempt-result.component';
 
 const resultado: ResultadoIntento = {
   id: 7,
+  tipo: 'EVALUACION',
   evaluacionId: 1,
   evaluacionNombre: 'Evaluación inicial',
+  temaId: null,
+  temaNombre: null,
   estado: 'FINALIZADO',
   fechaInicio: '2026-11-13T10:00:00',
   fechaFin: '2026-11-13T10:20:00',

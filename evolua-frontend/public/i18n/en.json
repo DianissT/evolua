@@ -15,7 +15,8 @@
   "nav": {
     "courses": "Courses",
     "audit": "Audit log",
-    "progress": "My progress"
+    "progress": "My progress",
+    "practice": "Practice"
   },
   "layout": {
     "skip": "Skip to content",
@@ -235,5 +236,31 @@
     "activity": "Activity",
     "score": "Score",
     "view": "View result"
+  },
+  "practice": {
+    "title": "Practice",
+    "intro": "Practice a topic whenever you want: let Evolua pick the questions for your level, or choose the difficulty yourself.",
+    "topic": "Topic",
+    "chooseTopic": "Choose a topic",
+    "topicRequired": "Choose a topic to practice.",
+    "noTopics": "No topics available. Enroll in a course with active topics.",
+    "mode": "Mode",
+    "auto": "Automatic",
+    "autoHelp": "Evolua picks the questions based on your current recommendation and favors those you haven't seen for longest. If there aren't enough at that difficulty, it fills in with the closest ones.",
+    "free": "Free",
+    "freeHelp": "You choose the difficulty and the number of questions.",
+    "autoWithRec": "Your current recommendation for this topic is \"{{activity}}\". Questions of difficulty",
+    "autoWithoutRec": "You have no recommendation for this topic yet. It will start with difficulty",
+    "difficulty": "Difficulty",
+    "anyDifficulty": "Any",
+    "count": "Number of questions",
+    "countHelp": "Between 1 and 20. Leave empty to use the default number.",
+    "countInvalid": "The number must be between 1 and 20.",
+    "start": "Start practice",
+    "starting": "Preparing…",
+    "attemptTitle": "Practice: {{topic}}",
+    "rowLabel": "Practice: {{topic}}",
+    "again": "Practice this topic",
+    "practiceTopic": "Practice"
   }
 }
