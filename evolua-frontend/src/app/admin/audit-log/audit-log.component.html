@@ -2,10 +2,28 @@
 <app-alert [mensaje]="error()" />
 
 @if (cargando()) {
-  <p class="text-secondary" role="status">{{ 'common.loading' | translate }}</p>
+  <p class="text-body" role="status">{{ 'common.loading' | translate }}</p>
 } @else if (registros().length === 0 && !error()) {
-  <p class="text-secondary">{{ 'audit.empty' | translate }}</p>
+  <p class="text-body">{{ 'audit.empty' | translate }}</p>
 } @else {
+  <div class="row g-3 mb-3">
+    <div class="col-12 col-md-4">
+      <label for="filtro-accion" class="form-label">{{ 'audit.filterAction' | translate }}</label>
+      <select id="filtro-accion" class="form-select" (change)="alCambiarAccion($event)">
+        <option value="">{{ 'audit.allActions' | translate }}</option>
+        @for (accion of acciones(); track accion) {
+          <option [value]="accion">{{ accion }}</option>
+        }
+      </select>
+    </div>
+    <div class="col-12 col-md-8">
+      <label for="filtro-texto" class="form-label">{{ 'audit.search' | translate }}</label>
+      <input id="filtro-texto" type="search" class="form-control" [value]="filtroTexto()" (input)="alCambiarTexto($event)" />
+    </div>
+  </div>
+  <p class="small text-body" role="status">
+    {{ 'audit.shown' | translate: { count: filtrados().length, total: registros().length } }}
+  </p>
   <div class="table-responsive card">
     <table class="table table-hover mb-0 align-middle">
       <caption class="visually-hidden">{{ 'audit.title' | translate }}</caption>
@@ -19,12 +37,12 @@
         </tr>
       </thead>
       <tbody>
-        @for (registro of registros(); track registro.id) {
+        @for (registro of filtrados(); track registro.id) {
           <tr>
             <td class="text-nowrap">{{ registro.fecha | date: 'yyyy-MM-dd HH:mm' }}</td>
-            <td>{{ registro.usuarioId ?? '—' }}</td>
+            <td>{{ registro.usuarioNombre ?? registro.usuarioId ?? '—' }}</td>
             <td><span class="badge text-bg-secondary">{{ registro.accion }}</span></td>
-            <td>{{ registro.entidad }} #{{ registro.entidadId }}</td>
+            <td>{{ registro.entidad }}{{ registro.entidadId === null ? '' : ' #' + registro.entidadId }}</td>
             <td>{{ registro.detalle }}</td>
           </tr>
         }

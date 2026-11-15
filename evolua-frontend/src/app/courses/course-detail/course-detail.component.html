@@ -3,14 +3,17 @@
 <app-alert [mensaje]="error()" />
 
 @if (cargando()) {
-  <p class="text-secondary" role="status">{{ 'common.loading' | translate }}</p>
+  <p class="text-body" role="status">{{ 'common.loading' | translate }}</p>
 }
 
 @if (curso(); as c) {
   <header class="mb-4">
     <h1 class="h3 fw-bold">{{ c.nombre }}</h1>
-    <p class="text-secondary mb-1">{{ 'courses.teacher' | translate }}: {{ c.docenteNombre }}</p>
+    <p class="text-body mb-1">{{ 'courses.teacher' | translate }}: {{ c.docenteNombre }}</p>
     <p>{{ c.descripcion }}</p>
+    @if (esDocente()) {
+      <a class="btn btn-outline-primary btn-sm" [routerLink]="['/courses', c.id, 'report']">{{ 'report.view' | translate }}</a>
+    }
   </header>
 
   <section [attr.aria-labelledby]="'temas-titulo'">
@@ -40,7 +43,7 @@
     }
 
     @if (temas().length === 0 && !cargando()) {
-      <p class="text-secondary">{{ 'topics.empty' | translate }}</p>
+      <p class="text-body">{{ 'topics.empty' | translate }}</p>
     } @else {
       <ul class="list-group">
         @for (tema of temas(); track tema.id) {

@@ -1,13 +1,13 @@
 <div class="mx-auto" style="max-width: 760px">
   <h1 class="h3 fw-bold mb-1">{{ 'practice.title' | translate }}</h1>
-  <p class="text-secondary mb-4">{{ 'practice.intro' | translate }}</p>
+  <p class="text-body mb-4">{{ 'practice.intro' | translate }}</p>
 
   <app-alert [mensaje]="error()" />
 
   @if (cargando()) {
-    <p class="text-secondary" role="status">{{ 'common.loading' | translate }}</p>
+    <p class="text-body" role="status">{{ 'common.loading' | translate }}</p>
   } @else if (temas().length === 0 && !error()) {
-    <p class="text-secondary">{{ 'practice.noTopics' | translate }}</p>
+    <p class="text-body">{{ 'practice.noTopics' | translate }}</p>
   } @else if (temas().length > 0) {
     <form class="card" [formGroup]="form" (ngSubmit)="iniciar()" novalidate>
       <div class="card-body p-4 d-flex flex-column gap-4">
@@ -45,14 +45,14 @@
             <input class="form-check-input" type="radio" id="modo-auto" formControlName="modalidad" value="AUTOMATICA" />
             <label class="form-check-label" for="modo-auto">
               <strong>{{ 'practice.auto' | translate }}</strong>
-              <span class="d-block small text-secondary">{{ 'practice.autoHelp' | translate }}</span>
+              <span class="d-block small text-body">{{ 'practice.autoHelp' | translate }}</span>
             </label>
           </div>
           <div class="form-check">
             <input class="form-check-input" type="radio" id="modo-libre" formControlName="modalidad" value="LIBRE" />
             <label class="form-check-label" for="modo-libre">
               <strong>{{ 'practice.free' | translate }}</strong>
-              <span class="d-block small text-secondary">{{ 'practice.freeHelp' | translate }}</span>
+              <span class="d-block small text-body">{{ 'practice.freeHelp' | translate }}</span>
             </label>
           </div>
         </fieldset>

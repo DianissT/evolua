@@ -37,6 +37,12 @@ export const routes: Routes = [
               import('./courses/course-form/course-form.component').then((m) => m.CourseFormComponent),
           },
           {
+            path: ':id/report',
+            canActivate: [rolGuard('DOCENTE')],
+            loadComponent: () =>
+              import('./reports/course-report/course-report.component').then((m) => m.CourseReportComponent),
+          },
+          {
             path: ':id',
             loadComponent: () =>
               import('./courses/course-detail/course-detail.component').then((m) => m.CourseDetailComponent),
@@ -95,6 +101,16 @@ export const routes: Routes = [
         canActivate: [rolGuard('ESTUDIANTE')],
         loadComponent: () =>
           import('./progress/my-progress/my-progress.component').then((m) => m.MyProgressComponent),
+      },
+      {
+        path: 'admin/users',
+        canActivate: [rolGuard('ADMIN')],
+        loadComponent: () => import('./admin/user-admin/user-admin.component').then((m) => m.UserAdminComponent),
+      },
+      {
+        path: 'admin/settings',
+        canActivate: [rolGuard('ADMIN')],
+        loadComponent: () => import('./admin/settings/settings.component').then((m) => m.SettingsComponent),
       },
       {
         path: 'admin/audit',

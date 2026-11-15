@@ -16,7 +16,9 @@
     "courses": "Cursos",
     "audit": "Auditoría",
     "progress": "Mi progreso",
-    "practice": "Práctica"
+    "practice": "Práctica",
+    "users": "Usuarios",
+    "settings": "Configuración"
   },
   "layout": {
     "skip": "Saltar al contenido",
@@ -113,13 +115,17 @@
     "user": "Usuario",
     "action": "Acción",
     "entity": "Entidad",
-    "detail": "Detalle"
+    "detail": "Detalle",
+    "filterAction": "Filtrar por acción",
+    "allActions": "Todas las acciones",
+    "search": "Buscar por usuario, entidad o detalle",
+    "shown": "Mostrando {{count}} de {{total}} registros"
   },
   "errors": {
-    "network": "No se pudo conectar con el servidor. Inténtalo de nuevo.",
     "401": "Tu sesión no es válida. Inicia sesión de nuevo.",
     "403": "No tienes permiso para realizar esta acción.",
     "404": "No se encontró el recurso solicitado.",
+    "network": "No se pudo conectar con el servidor. Inténtalo de nuevo.",
     "generic": "Ocurrió un error inesperado.",
     "forbiddenTitle": "Acceso denegado",
     "forbiddenText": "No tienes permiso para ver esta página.",
@@ -262,5 +268,68 @@
     "rowLabel": "Práctica: {{topic}}",
     "again": "Practicar este tema",
     "practiceTopic": "Practicar"
+  },
+  "report": {
+    "view": "Ver reporte",
+    "back": "Volver al curso",
+    "title": "Reporte de rendimiento",
+    "indicators": "Indicadores generales",
+    "enrolled": "Estudiantes matriculados",
+    "withActivity": "Con actividad",
+    "attemptsDone": "Intentos finalizados",
+    "average": "Promedio",
+    "byTopic": "Resultado por tema",
+    "answers": "Respuestas",
+    "correct": "Correctas",
+    "successRate": "Aciertos",
+    "inReinforcement": "Estudiantes en refuerzo",
+    "byStudent": "Resultado por estudiante",
+    "search": "Buscar por nombre o correo",
+    "onlyWeak": "Solo estudiantes con temas en refuerzo",
+    "exportCsv": "Exportar CSV",
+    "shown": "Mostrando {{count}} de {{total}} estudiantes",
+    "student": "Estudiante",
+    "attempts": "Intentos",
+    "lastActivity": "Última actividad",
+    "weakTopics": "Temas en refuerzo",
+    "hardQuestions": "Preguntas más difíciles",
+    "filterTopic": "Filtrar por tema",
+    "allTopics": "Todos los temas",
+    "hardHelp": "Solo se listan preguntas con al menos 3 respuestas, ordenadas de menor a mayor porcentaje de aciertos.",
+    "noHard": "Aún no hay preguntas con suficientes respuestas."
+  },
+  "users": {
+    "title": "Usuarios y roles",
+    "new": "Crear usuario",
+    "list": "Lista de usuarios",
+    "name": "Nombre",
+    "email": "Correo",
+    "password": "Contraseña",
+    "role": "Rol",
+    "since": "Creado",
+    "you": "Tú",
+    "create": "Crear usuario",
+    "nameInvalid": "Escribe el nombre (máximo 100 caracteres).",
+    "emailInvalid": "Escribe un correo válido.",
+    "passwordHelp": "Entre 8 y 72 caracteres.",
+    "passwordInvalid": "La contraseña debe tener entre 8 y 72 caracteres.",
+    "created": "Usuario {{name}} creado.",
+    "roleOf": "Rol de {{name}}",
+    "confirmRole": "¿Cambiar el rol de {{name}} a {{role}}?",
+    "roleChanged": "El rol de {{name}} ahora es {{role}}."
+  },
+  "settings": {
+    "title": "Configuración del sistema",
+    "intro": "Umbrales del motor adaptativo y parámetros de práctica. Los cambios se aplican a partir del siguiente intento que se finalice.",
+    "range": "Entre {{min}} y {{max}}",
+    "invalid": "Escribe un número entero dentro del rango indicado.",
+    "saved": "Parámetro guardado.",
+    "param": {
+      "umbral_refuerzo": "Umbral de refuerzo (%)",
+      "umbral_dominio": "Umbral de dominio (%)",
+      "min_respuestas_tema": "Respuestas mínimas para clasificar un tema",
+      "intentos_para_dominio": "Resultados satisfactorios para declarar dominio",
+      "preguntas_por_practica": "Preguntas por práctica automática"
+    }
   }
 }

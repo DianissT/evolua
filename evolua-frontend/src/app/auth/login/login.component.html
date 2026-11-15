@@ -13,7 +13,7 @@
     <form class="card shadow-sm w-100" style="max-width: 420px" [formGroup]="formulario" (ngSubmit)="ingresar()" novalidate>
       <div class="card-body p-4">
         <h2 class="h3 fw-bold mb-1">{{ 'login.title' | translate }}</h2>
-        <p class="text-secondary mb-4">{{ 'login.subtitle' | translate }}</p>
+        <p class="text-body mb-4">{{ 'login.subtitle' | translate }}</p>
 
         @if (sesionExpirada) {
           <app-alert tipo="warning" [mensaje]="'login.expired' | translate" />

@@ -45,7 +45,7 @@
 
     <fieldset class="mb-4">
       <legend class="form-label fw-semibold fs-6">{{ 'quizzes.questions' | translate }}</legend>
-      <p class="small text-secondary">{{ 'quizzes.questionsHelp' | translate }}</p>
+      <p class="small text-body">{{ 'quizzes.questionsHelp' | translate }}</p>
       @for (grupo of grupos(); track grupo.tema.id) {
         <h2 class="h6 fw-bold mt-3">{{ grupo.tema.nombre }}</h2>
         @for (pregunta of grupo.preguntas; track pregunta.id) {
@@ -69,12 +69,12 @@
           </div>
         }
       } @empty {
-        <p class="text-secondary">{{ 'quizzes.noQuestions' | translate }}</p>
+        <p class="text-body">{{ 'quizzes.noQuestions' | translate }}</p>
       }
       @if (enviado() && seleccion().length === 0) {
         <div class="text-danger small mt-2" role="alert">{{ 'quizzes.questionsRequired' | translate }}</div>
       }
-      <p class="small text-secondary mt-3 mb-0">{{ 'quizzes.selected' | translate: { count: seleccion().length } }}</p>
+      <p class="small text-body mt-3 mb-0">{{ 'quizzes.selected' | translate: { count: seleccion().length } }}</p>
     </fieldset>
 
     <div class="d-flex gap-2">

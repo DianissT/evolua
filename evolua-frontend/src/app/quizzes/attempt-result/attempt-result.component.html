@@ -1,11 +1,11 @@
 <app-alert [mensaje]="error()" />
 
 @if (cargando()) {
-  <p class="text-secondary" role="status">{{ 'common.loading' | translate }}</p>
+  <p class="text-body" role="status">{{ 'common.loading' | translate }}</p>
 }
 
 @if (resultado(); as r) {
-  <p class="small text-secondary mb-1">
+  <p class="small text-body mb-1">
     @if (r.tipo === 'PRACTICA') {
       {{ 'practice.attemptTitle' | translate: { topic: r.temaNombre } }}
     } @else {
@@ -21,9 +21,9 @@
         <div class="card-body p-4">
           <h2 id="puntuacion-titulo" class="visually-hidden">{{ 'result.score' | translate }}</h2>
           <p class="display-3 fw-bold text-primary mb-1">{{ numero(r.puntuacion) }} %</p>
-          <p class="text-secondary mb-1">{{ 'result.correctOf' | translate: { correct: r.correctas, total: r.totalPreguntas } }}</p>
+          <p class="text-body mb-1">{{ 'result.correctOf' | translate: { correct: r.correctas, total: r.totalPreguntas } }}</p>
           @if (r.sinResponder > 0) {
-            <p class="small text-secondary">{{ 'result.unanswered' | translate: { count: r.sinResponder } }}</p>
+            <p class="small text-body">{{ 'result.unanswered' | translate: { count: r.sinResponder } }}</p>
           }
 
           <h3 class="h6 fw-bold mt-4">{{ 'result.byTopic' | translate }}</h3>
@@ -53,7 +53,7 @@
               <p class="fw-bold mb-1">{{ 'result.why' | translate }}</p>
               <p class="mb-0">{{ rec.motivo }}</p>
             </div>
-            <p class="mb-0 small text-secondary">
+            <p class="mb-0 small text-body">
               {{ 'result.suggestedDifficulty' | translate }}:
               {{ 'difficulty.' + rec.dificultadMinima | translate }}
               @if (rec.dificultadMaxima !== rec.dificultadMinima) {
@@ -63,7 +63,7 @@
           </div>
         </article>
       } @empty {
-        <p class="text-secondary">{{ 'result.noRecommendations' | translate }}</p>
+        <p class="text-body">{{ 'result.noRecommendations' | translate }}</p>
       }
       <div class="d-flex flex-wrap gap-2">
         @if (r.tipo === 'PRACTICA') {

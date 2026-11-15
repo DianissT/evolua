@@ -1,0 +1,192 @@
+<a class="btn btn-link px-0 mb-2" [routerLink]="['/courses', idNumerico()]">← {{ 'report.back' | translate }}</a>
+
+<app-alert [mensaje]="error()" />
+
+@if (cargando()) {
+  <p class="text-body" role="status">{{ 'common.loading' | translate }}</p>
+}
+
+@if (reporte(); as r) {
+  <h1 class="h3 fw-bold mb-1">{{ 'report.title' | translate }}</h1>
+  <p class="text-body mb-4">{{ r.cursoNombre }}</p>
+
+  <section aria-labelledby="indicadores-titulo" class="mb-4">
+    <h2 id="indicadores-titulo" class="visually-hidden">{{ 'report.indicators' | translate }}</h2>
+    <div class="row row-cols-2 row-cols-lg-4 g-3">
+      <div class="col">
+        <div class="card h-100"><div class="card-body">
+          <p class="small text-body mb-1">{{ 'report.enrolled' | translate }}</p>
+          <p class="display-6 fw-bold mb-0">{{ r.estudiantesMatriculados }}</p>
+        </div></div>
+      </div>
+      <div class="col">
+        <div class="card h-100"><div class="card-body">
+          <p class="small text-body mb-1">{{ 'report.withActivity' | translate }}</p>
+          <p class="display-6 fw-bold mb-0">{{ r.estudiantesConActividad }}</p>
+        </div></div>
+      </div>
+      <div class="col">
+        <div class="card h-100"><div class="card-body">
+          <p class="small text-body mb-1">{{ 'report.attemptsDone' | translate }}</p>
+          <p class="display-6 fw-bold mb-0">{{ r.intentosFinalizados }}</p>
+        </div></div>
+      </div>
+      <div class="col">
+        <div class="card h-100"><div class="card-body">
+          <p class="small text-body mb-1">{{ 'report.average' | translate }}</p>
+          <p class="display-6 fw-bold mb-0">{{ r.promedioPuntuacion === null ? '—' : numero(r.promedioPuntuacion) + ' %' }}</p>
+        </div></div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="temas-reporte-titulo" class="mb-4">
+    <h2 id="temas-reporte-titulo" class="h5 fw-bold mb-3">{{ 'report.byTopic' | translate }}</h2>
+    @if (r.temas.length === 0) {
+      <p class="text-body">{{ 'topics.empty' | translate }}</p>
+    } @else {
+      <div class="table-responsive card">
+        <table class="table table-hover mb-0 align-middle">
+          <caption class="visually-hidden">{{ 'report.byTopic' | translate }}</caption>
+          <thead>
+            <tr>
+              <th scope="col">{{ 'progress.topics' | translate }}</th>
+              <th scope="col" class="text-end">{{ 'report.answers' | translate }}</th>
+              <th scope="col" class="text-end">{{ 'report.correct' | translate }}</th>
+              <th scope="col" style="min-width: 11rem">{{ 'report.successRate' | translate }}</th>
+              <th scope="col" class="text-end">{{ 'report.inReinforcement' | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (t of r.temas; track t.temaId) {
+              <tr>
+                <th scope="row" class="fw-semibold">{{ t.temaNombre }}</th>
+                <td class="text-end">{{ t.totalRespuestas }}</td>
+                <td class="text-end">{{ t.respuestasCorrectas }}</td>
+                <td>
+                  <div class="d-flex align-items-center gap-2">
+                    <div class="progress flex-grow-1" role="progressbar" [attr.aria-label]="t.temaNombre" [attr.aria-valuenow]="t.porcentajeAciertos" aria-valuemin="0" aria-valuemax="100">
+                      <div class="progress-bar" [style.width.%]="t.porcentajeAciertos"></div>
+                    </div>
+                    <span class="text-nowrap">{{ numero(t.porcentajeAciertos) }} %</span>
+                  </div>
+                </td>
+                <td class="text-end">
+                  @if (t.estudiantesEnRefuerzo > 0) {
+                    <span class="badge text-bg-warning">{{ t.estudiantesEnRefuerzo }}</span>
+                  } @else {
+                    0
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </section>
+
+  <section aria-labelledby="estudiantes-titulo" class="mb-4">
+    <h2 id="estudiantes-titulo" class="h5 fw-bold mb-3">{{ 'report.byStudent' | translate }}</h2>
+    <div class="row g-3 align-items-end mb-3">
+      <div class="col-12 col-md-5">
+        <label for="filtro-estudiante" class="form-label">{{ 'report.search' | translate }}</label>
+        <input id="filtro-estudiante" type="search" class="form-control" [value]="filtroTexto()" (input)="alCambiarTexto($event)" />
+      </div>
+      <div class="col-12 col-md-4">
+        <div class="form-check">
+          <input id="solo-refuerzo" type="checkbox" class="form-check-input" [checked]="soloRefuerzo()" (change)="alCambiarRefuerzo($event)" />
+          <label for="solo-refuerzo" class="form-check-label">{{ 'report.onlyWeak' | translate }}</label>
+        </div>
+      </div>
+      <div class="col-12 col-md-3 text-md-end">
+        <button type="button" class="btn btn-outline-primary" (click)="exportarCsv()" [disabled]="estudiantes().length === 0">
+          {{ 'report.exportCsv' | translate }}
+        </button>
+      </div>
+    </div>
+    <p class="small text-body" role="status">
+      {{ 'report.shown' | translate: { count: estudiantes().length, total: r.estudiantes.length } }}
+    </p>
+    @if (estudiantes().length > 0) {
+      <div class="table-responsive card">
+        <table class="table table-hover mb-0 align-middle">
+          <caption class="visually-hidden">{{ 'report.byStudent' | translate }}</caption>
+          <thead>
+            <tr>
+              <th scope="col">{{ 'report.student' | translate }}</th>
+              <th scope="col" class="text-end">{{ 'report.attempts' | translate }}</th>
+              <th scope="col" class="text-end">{{ 'report.average' | translate }}</th>
+              <th scope="col">{{ 'report.lastActivity' | translate }}</th>
+              <th scope="col" class="text-end">{{ 'report.weakTopics' | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (e of estudiantes(); track e.estudianteId) {
+              <tr>
+                <th scope="row" class="fw-semibold">
+                  {{ e.nombre }}<br /><span class="small fw-normal text-body">{{ e.correo }}</span>
+                </th>
+                <td class="text-end">{{ e.intentosFinalizados }}</td>
+                <td class="text-end">{{ e.promedioPuntuacion === null ? '—' : numero(e.promedioPuntuacion) + ' %' }}</td>
+                <td class="text-nowrap">{{ e.ultimaActividad ? (e.ultimaActividad | date: 'yyyy-MM-dd HH:mm') : '—' }}</td>
+                <td class="text-end">
+                  @if (e.temasEnRefuerzo > 0) {
+                    <span class="badge text-bg-warning">{{ e.temasEnRefuerzo }}</span>
+                  } @else {
+                    0
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </section>
+
+  <section aria-labelledby="dificiles-titulo">
+    <h2 id="dificiles-titulo" class="h5 fw-bold mb-3">{{ 'report.hardQuestions' | translate }}</h2>
+    <div class="row g-3 mb-3">
+      <div class="col-12 col-md-5">
+        <label for="filtro-tema" class="form-label">{{ 'report.filterTopic' | translate }}</label>
+        <select id="filtro-tema" class="form-select" (change)="alCambiarTema($event)">
+          <option value="">{{ 'report.allTopics' | translate }}</option>
+          @for (t of r.temas; track t.temaId) {
+            <option [value]="t.temaId">{{ t.temaNombre }}</option>
+          }
+        </select>
+      </div>
+    </div>
+    <p class="small text-body">{{ 'report.hardHelp' | translate }}</p>
+    @if (dificiles().length === 0) {
+      <p class="text-body">{{ 'report.noHard' | translate }}</p>
+    } @else {
+      <div class="table-responsive card">
+        <table class="table table-hover mb-0 align-middle">
+          <caption class="visually-hidden">{{ 'report.hardQuestions' | translate }}</caption>
+          <thead>
+            <tr>
+              <th scope="col">{{ 'questions.statement' | translate }}</th>
+              <th scope="col">{{ 'progress.topics' | translate }}</th>
+              <th scope="col" class="text-end">{{ 'questions.difficulty' | translate }}</th>
+              <th scope="col" class="text-end">{{ 'report.answers' | translate }}</th>
+              <th scope="col" class="text-end">{{ 'report.successRate' | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (p of dificiles(); track p.preguntaId) {
+              <tr>
+                <td>{{ p.enunciado }}</td>
+                <td>{{ p.temaNombre }}</td>
+                <td class="text-end">{{ 'difficulty.' + p.dificultad | translate }}</td>
+                <td class="text-end">{{ p.totalRespuestas }}</td>
+                <td class="text-end text-nowrap">{{ numero(p.porcentajeAciertos) }} %</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </section>
+}

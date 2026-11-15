@@ -16,7 +16,9 @@
     "courses": "Courses",
     "audit": "Audit log",
     "progress": "My progress",
-    "practice": "Practice"
+    "practice": "Practice",
+    "users": "Users",
+    "settings": "Settings"
   },
   "layout": {
     "skip": "Skip to content",
@@ -113,13 +115,17 @@
     "user": "User",
     "action": "Action",
     "entity": "Entity",
-    "detail": "Detail"
+    "detail": "Detail",
+    "filterAction": "Filter by action",
+    "allActions": "All actions",
+    "search": "Search by user, entity or detail",
+    "shown": "Showing {{count}} of {{total}} records"
   },
   "errors": {
-    "network": "Could not connect to the server. Please try again.",
     "401": "Your session is not valid. Please log in again.",
     "403": "You do not have permission to perform this action.",
     "404": "The requested resource was not found.",
+    "network": "Could not connect to the server. Please try again.",
     "generic": "An unexpected error occurred.",
     "forbiddenTitle": "Access denied",
     "forbiddenText": "You do not have permission to view this page.",
@@ -262,5 +268,68 @@
     "rowLabel": "Practice: {{topic}}",
     "again": "Practice this topic",
     "practiceTopic": "Practice"
+  },
+  "report": {
+    "view": "View report",
+    "back": "Back to course",
+    "title": "Performance report",
+    "indicators": "Overall indicators",
+    "enrolled": "Enrolled students",
+    "withActivity": "With activity",
+    "attemptsDone": "Completed attempts",
+    "average": "Average",
+    "byTopic": "Results by topic",
+    "answers": "Answers",
+    "correct": "Correct",
+    "successRate": "Success rate",
+    "inReinforcement": "Students needing reinforcement",
+    "byStudent": "Results by student",
+    "search": "Search by name or email",
+    "onlyWeak": "Only students with topics needing reinforcement",
+    "exportCsv": "Export CSV",
+    "shown": "Showing {{count}} of {{total}} students",
+    "student": "Student",
+    "attempts": "Attempts",
+    "lastActivity": "Last activity",
+    "weakTopics": "Topics needing reinforcement",
+    "hardQuestions": "Hardest questions",
+    "filterTopic": "Filter by topic",
+    "allTopics": "All topics",
+    "hardHelp": "Only questions with at least 3 answers are listed, from lowest to highest success rate.",
+    "noHard": "There are no questions with enough answers yet."
+  },
+  "users": {
+    "title": "Users and roles",
+    "new": "Create user",
+    "list": "User list",
+    "name": "Name",
+    "email": "Email",
+    "password": "Password",
+    "role": "Role",
+    "since": "Created",
+    "you": "You",
+    "create": "Create user",
+    "nameInvalid": "Enter the name (maximum 100 characters).",
+    "emailInvalid": "Enter a valid email.",
+    "passwordHelp": "Between 8 and 72 characters.",
+    "passwordInvalid": "The password must be between 8 and 72 characters.",
+    "created": "User {{name}} created.",
+    "roleOf": "Role of {{name}}",
+    "confirmRole": "Change the role of {{name}} to {{role}}?",
+    "roleChanged": "The role of {{name}} is now {{role}}."
+  },
+  "settings": {
+    "title": "System settings",
+    "intro": "Adaptive engine thresholds and practice parameters. Changes apply from the next attempt that is submitted.",
+    "range": "Between {{min}} and {{max}}",
+    "invalid": "Enter a whole number within the range shown.",
+    "saved": "Setting saved.",
+    "param": {
+      "umbral_refuerzo": "Reinforcement threshold (%)",
+      "umbral_dominio": "Mastery threshold (%)",
+      "min_respuestas_tema": "Minimum answers to classify a topic",
+      "intentos_para_dominio": "Satisfactory results to declare mastery",
+      "preguntas_por_practica": "Questions per automatic practice"
+    }
   }
 }

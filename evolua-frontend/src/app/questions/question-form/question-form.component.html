@@ -62,7 +62,7 @@
 
           <fieldset class="mb-3">
             <legend class="form-label fw-semibold fs-6">{{ 'questions.options' | translate }}</legend>
-            <p class="small text-secondary">{{ 'questions.optionsHelp' | translate }}</p>
+            <p class="small text-body">{{ 'questions.optionsHelp' | translate }}</p>
             @for (opcion of opciones.controls; track $index) {
               <div class="input-group mb-2">
                 <div class="input-group-text">
@@ -130,14 +130,14 @@
     <aside class="col-lg-4" [attr.aria-label]="'questions.preview' | translate">
       <div class="card bg-white">
         <div class="card-body">
-          <p class="small fw-bold text-secondary text-uppercase mb-3">{{ 'questions.preview' | translate }}</p>
+          <p class="small fw-bold text-body text-uppercase mb-3">{{ 'questions.preview' | translate }}</p>
           <p class="fw-semibold text-pre-wrap">{{ formulario.controls.enunciado.value || ('questions.previewEmpty' | translate) }}</p>
           <ul class="list-group mb-3">
             @for (opcion of opciones.controls; track $index) {
               <li class="list-group-item">{{ opcion.value || '…' }}</li>
             }
           </ul>
-          <p class="small text-secondary mb-0">{{ 'questions.previewNote' | translate }}</p>
+          <p class="small text-body mb-0">{{ 'questions.previewNote' | translate }}</p>
         </div>
       </div>
     </aside>

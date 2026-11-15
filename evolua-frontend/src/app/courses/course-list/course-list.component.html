@@ -18,9 +18,9 @@
 }
 
 @if (cargando()) {
-  <p class="text-secondary" role="status">{{ 'common.loading' | translate }}</p>
+  <p class="text-body" role="status">{{ 'common.loading' | translate }}</p>
 } @else if (lista().length === 0 && !error()) {
-  <p class="text-secondary">{{ (esDocente() ? 'courses.emptyTeacher' : 'courses.emptyStudent') | translate }}</p>
+  <p class="text-body">{{ (esDocente() ? 'courses.emptyTeacher' : 'courses.emptyStudent') | translate }}</p>
 } @else {
   <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
     @for (curso of lista(); track curso.id) {
@@ -35,7 +35,7 @@
               }
             </div>
             <h2 class="h5 fw-bold">{{ curso.nombre }}</h2>
-            <p class="small text-secondary mb-2">{{ 'courses.teacher' | translate }}: {{ curso.docenteNombre }}</p>
+            <p class="small text-body mb-2">{{ 'courses.teacher' | translate }}: {{ curso.docenteNombre }}</p>
             <p class="flex-grow-1">{{ curso.descripcion }}</p>
             <div class="d-flex flex-wrap gap-2">
               <a class="btn btn-primary btn-sm" [routerLink]="['/courses', curso.id]">

@@ -1,13 +1,13 @@
 <app-alert [mensaje]="error()" />
 
 @if (cargando()) {
-  <p class="text-secondary" role="status">{{ 'common.loading' | translate }}</p>
+  <p class="text-body" role="status">{{ 'common.loading' | translate }}</p>
 }
 
 @if (intento(); as i) {
   @if (pregunta(); as p) {
     <div class="mx-auto" style="max-width: 820px">
-      <div class="d-flex flex-wrap justify-content-between gap-2 small text-secondary mb-2">
+      <div class="d-flex flex-wrap justify-content-between gap-2 small text-body mb-2">
         <span>
           @if (i.tipo === 'PRACTICA') {
             {{ 'practice.attemptTitle' | translate: { topic: i.temaNombre } }}
@@ -57,7 +57,7 @@
               {{ 'attempt.previous' | translate }}
             </button>
             @if (pendientes() > 0) {
-              <span class="small text-secondary" role="status">{{ 'attempt.saving' | translate }}</span>
+              <span class="small text-body" role="status">{{ 'attempt.saving' | translate }}</span>
             }
             @if (esUltima()) {
               <button type="button" class="btn btn-primary" [disabled]="pendientes() > 0 || finalizando()" (click)="finalizar()">
@@ -86,7 +86,7 @@
           </button>
         }
       </nav>
-      <p class="small text-secondary mt-2">{{ 'attempt.answered' | translate: { answered: total() - sinResponder(), total: total() } }}</p>
+      <p class="small text-body mt-2">{{ 'attempt.answered' | translate: { answered: total() - sinResponder(), total: total() } }}</p>
     </div>
   }
 }

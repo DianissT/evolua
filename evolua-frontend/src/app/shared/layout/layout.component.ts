@@ -24,7 +24,11 @@ export class LayoutComponent {
   readonly enlaces = computed<Enlace[]>(() => {
     switch (this.auth.rol()) {
       case 'ADMIN':
-        return [{ ruta: '/admin/audit', clave: 'nav.audit' }];
+        return [
+          { ruta: '/admin/users', clave: 'nav.users' },
+          { ruta: '/admin/settings', clave: 'nav.settings' },
+          { ruta: '/admin/audit', clave: 'nav.audit' },
+        ];
       case 'ESTUDIANTE':
         return [
           { ruta: '/courses', clave: 'nav.courses' },

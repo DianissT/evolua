@@ -1,0 +1,53 @@
+<h1 class="h3 fw-bold mb-2">{{ 'settings.title' | translate }}</h1>
+<p class="text-body mb-4">{{ 'settings.intro' | translate }}</p>
+
+<app-alert [mensaje]="error()" />
+<app-alert tipo="success" [mensaje]="exito()" />
+
+@if (cargando()) {
+  <p class="text-body" role="status">{{ 'common.loading' | translate }}</p>
+} @else {
+  <div class="card">
+    <ul class="list-group list-group-flush">
+      @for (fila of filas(); track fila.clave) {
+        <li class="list-group-item">
+          <form class="row g-2 align-items-start" (ngSubmit)="guardar(fila)" novalidate>
+            <div class="col-12 col-md-6">
+              <label [for]="'param-' + fila.clave" class="form-label fw-semibold mb-0">
+                {{ 'settings.param.' + fila.clave | translate }}
+              </label>
+              <div class="form-text mt-0" [id]="'param-ayuda-' + fila.clave">
+                @if (fila.limites; as l) {
+                  {{ 'settings.range' | translate: { min: l.min, max: l.max } }}
+                }
+              </div>
+            </div>
+            <div class="col-6 col-md-2">
+              <input
+                [id]="'param-' + fila.clave"
+                type="text"
+                inputmode="numeric"
+                class="form-control"
+                [formControl]="fila.control"
+                [class.is-invalid]="fila.intentado && fila.control.invalid"
+                [attr.aria-invalid]="fila.intentado && fila.control.invalid"
+                [attr.aria-describedby]="'param-ayuda-' + fila.clave + ' param-error-' + fila.clave"
+              />
+              @if (fila.intentado && fila.control.invalid) {
+                <div [id]="'param-error-' + fila.clave" class="invalid-feedback d-block">
+                  {{ 'settings.invalid' | translate }}
+                </div>
+              }
+            </div>
+            <div class="col-6 col-md-4 d-flex gap-2">
+              <button type="submit" class="btn btn-primary">{{ 'common.save' | translate }}</button>
+              <button type="button" class="btn btn-outline-secondary" (click)="restaurar(fila)">
+                {{ 'common.cancel' | translate }}
+              </button>
+            </div>
+          </form>
+        </li>
+      }
+    </ul>
+  </div>
+}

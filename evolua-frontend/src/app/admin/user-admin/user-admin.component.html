@@ -1,0 +1,135 @@
+<h1 class="h3 fw-bold mb-4">{{ 'users.title' | translate }}</h1>
+
+<app-alert [mensaje]="error()" />
+<app-alert tipo="success" [mensaje]="exito()" />
+
+<section aria-labelledby="nuevo-usuario-titulo" class="mb-5">
+  <h2 id="nuevo-usuario-titulo" class="h5 fw-bold mb-3">{{ 'users.new' | translate }}</h2>
+  <form class="row g-3" [formGroup]="formulario" (ngSubmit)="crear()" novalidate>
+    <div class="col-12 col-md-6">
+      <label for="usuario-nombre" class="form-label">{{ 'users.name' | translate }}</label>
+      <input
+        id="usuario-nombre"
+        type="text"
+        class="form-control"
+        formControlName="nombre"
+        autocomplete="off"
+        [class.is-invalid]="enviado() && formulario.controls.nombre.invalid"
+        [attr.aria-invalid]="enviado() && formulario.controls.nombre.invalid"
+        aria-describedby="usuario-nombre-error"
+      />
+      @if (enviado() && formulario.controls.nombre.invalid) {
+        <div id="usuario-nombre-error" class="invalid-feedback">{{ 'users.nameInvalid' | translate }}</div>
+      }
+    </div>
+    <div class="col-12 col-md-6">
+      <label for="usuario-correo" class="form-label">{{ 'users.email' | translate }}</label>
+      <input
+        id="usuario-correo"
+        type="email"
+        class="form-control"
+        formControlName="correo"
+        autocomplete="off"
+        [class.is-invalid]="enviado() && formulario.controls.correo.invalid"
+        [attr.aria-invalid]="enviado() && formulario.controls.correo.invalid"
+        aria-describedby="usuario-correo-error"
+      />
+      @if (enviado() && formulario.controls.correo.invalid) {
+        <div id="usuario-correo-error" class="invalid-feedback">{{ 'users.emailInvalid' | translate }}</div>
+      }
+    </div>
+    <div class="col-12 col-md-6">
+      <label for="usuario-password" class="form-label">{{ 'users.password' | translate }}</label>
+      <input
+        id="usuario-password"
+        type="password"
+        class="form-control"
+        formControlName="password"
+        autocomplete="new-password"
+        [class.is-invalid]="enviado() && formulario.controls.password.invalid"
+        [attr.aria-invalid]="enviado() && formulario.controls.password.invalid"
+        aria-describedby="usuario-password-ayuda usuario-password-error"
+      />
+      <div id="usuario-password-ayuda" class="form-text">{{ 'users.passwordHelp' | translate }}</div>
+      @if (enviado() && formulario.controls.password.invalid) {
+        <div id="usuario-password-error" class="invalid-feedback d-block">{{ 'users.passwordInvalid' | translate }}</div>
+      }
+    </div>
+    <div class="col-12 col-md-3">
+      <label for="usuario-rol" class="form-label">{{ 'users.role' | translate }}</label>
+      <select id="usuario-rol" class="form-select" formControlName="rol">
+        @for (rol of roles; track rol) {
+          <option [value]="rol">{{ 'roles.' + rol | translate }}</option>
+        }
+      </select>
+    </div>
+    <div class="col-12 col-md-3 d-flex align-items-end">
+      <button type="submit" class="btn btn-primary w-100">{{ 'users.create' | translate }}</button>
+    </div>
+  </form>
+</section>
+
+<section aria-labelledby="lista-usuarios-titulo">
+  <h2 id="lista-usuarios-titulo" class="h5 fw-bold mb-3">{{ 'users.list' | translate }}</h2>
+  @if (cargando()) {
+    <p class="text-body" role="status">{{ 'common.loading' | translate }}</p>
+  } @else {
+    <div class="table-responsive card">
+      <table class="table table-hover mb-0 align-middle">
+        <caption class="visually-hidden">{{ 'users.list' | translate }}</caption>
+        <thead>
+          <tr>
+            <th scope="col">{{ 'users.name' | translate }}</th>
+            <th scope="col">{{ 'users.email' | translate }}</th>
+            <th scope="col">{{ 'users.role' | translate }}</th>
+            <th scope="col">{{ 'common.status' | translate }}</th>
+            <th scope="col">{{ 'users.since' | translate }}</th>
+            <th scope="col"><span class="visually-hidden">{{ 'common.actions' | translate }}</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (u of usuarios(); track u.id) {
+            <tr>
+              <th scope="row" class="fw-semibold">
+                {{ u.nombre }}
+                @if (esYo(u)) {
+                  <span class="badge text-bg-info ms-1">{{ 'users.you' | translate }}</span>
+                }
+              </th>
+              <td>{{ u.correo }}</td>
+              <td>
+                <label [for]="'rol-' + u.id" class="visually-hidden">{{ 'users.roleOf' | translate: { name: u.nombre } }}</label>
+                <select
+                  [id]="'rol-' + u.id"
+                  class="form-select form-select-sm"
+                  [disabled]="esYo(u)"
+                  (change)="cambiarRol(u, $event)"
+                >
+                  @for (rol of roles; track rol) {
+                    <option [value]="rol" [selected]="rol === u.rol">{{ 'roles.' + rol | translate }}</option>
+                  }
+                </select>
+              </td>
+              <td>
+                <span [class]="'badge ' + (u.activo ? 'text-bg-success' : 'text-bg-secondary')">
+                  {{ (u.activo ? 'common.active' : 'common.inactive') | translate }}
+                </span>
+              </td>
+              <td class="text-nowrap">{{ u.fechaCreacion | date: 'yyyy-MM-dd' }}</td>
+              <td class="text-end">
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary btn-sm"
+                  [disabled]="esYo(u) && u.activo"
+                  (click)="alternarEstado(u)"
+                >
+                  {{ (u.activo ? 'common.deactivate' : 'common.activate') | translate }}
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</section>

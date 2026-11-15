@@ -11,7 +11,7 @@
   <app-alert [mensaje]="error()" />
 
   @if (quizzes().length === 0) {
-    <p class="text-secondary">{{ (esDocente() ? 'quizzes.emptyTeacher' : 'quizzes.emptyStudent') | translate }}</p>
+    <p class="text-body">{{ (esDocente() ? 'quizzes.emptyTeacher' : 'quizzes.emptyStudent') | translate }}</p>
   } @else {
     <ul class="list-group">
       @for (quiz of quizzes(); track quiz.id) {
@@ -22,7 +22,7 @@
             @if (!quiz.activa) {
               <span class="badge text-bg-secondary ms-1">{{ 'common.inactive' | translate }}</span>
             }
-            <div class="small text-secondary">
+            <div class="small text-body">
               {{ 'quizzes.questionsCount' | translate: { count: quiz.totalPreguntas } }} ·
               @if (esDocente()) {
                 {{ (quiz.intentosPermitidos === null ? 'quizzes.unlimited' : 'quizzes.attemptsAllowed') | translate: { count: quiz.intentosPermitidos } }}
@@ -44,7 +44,7 @@
                 {{ (enCurso().has(quiz.id) ? 'quizzes.continue' : 'quizzes.start') | translate }}
               </button>
               @if (limiteAlcanzado(quiz)) {
-                <span class="small text-secondary align-self-center">{{ 'quizzes.limitReached' | translate }}</span>
+                <span class="small text-body align-self-center">{{ 'quizzes.limitReached' | translate }}</span>
               }
             }
           </div>
