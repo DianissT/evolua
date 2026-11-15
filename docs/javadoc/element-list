@@ -1,0 +1,10 @@
+com.evolua
+com.evolua.adaptation
+com.evolua.config
+com.evolua.controller
+com.evolua.dto
+com.evolua.entity
+com.evolua.exception
+com.evolua.repository
+com.evolua.security
+com.evolua.service
