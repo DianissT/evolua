@@ -97,7 +97,7 @@ export class CourseReportComponent implements OnInit {
       return;
     }
     const t = (clave: string) => this.translate.instant(clave) as string;
-    const separador = this.idioma() === 'es' ? ';' : ',';
+    const separador = this.idioma() === 'en' ? ',' : ';'; /** Español y portuges usan coma. */
     const filas = this.estudiantes().map((e) => [
       e.nombre,
       e.correo,
